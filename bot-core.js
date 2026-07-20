@@ -2608,7 +2608,7 @@ ensureStartedWhenOnline().catch((error) => {
 });
 
 const port = Number(process.env.PORT || 3000);
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const PUBLIC_DIR = path.join(process.cwd(), 'public');
 const STATIC_ROUTES = {
     '/': { file: 'index.html', type: 'text/html; charset=utf-8' },
     '/index.html': { file: 'index.html', type: 'text/html; charset=utf-8' },
