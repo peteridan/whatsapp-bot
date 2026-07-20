@@ -2531,7 +2531,7 @@ async function startSock() {
             const statusCode = lastDisconnect?.error?.output?.statusCode;
             const statusText = lastDisconnect?.error?.output?.payload || lastDisconnect?.error?.message || 'unknown';
             const isLoggedOut = statusCode === DisconnectReason.loggedOut;
-            const isConflict = [DisconnectReason.connectionReplaced, DisconnectReason.timedOut, 405, 440].includes(statusCode);
+            const isConflict = [DisconnectReason.connectionReplaced, 405, 440].includes(statusCode);
 
             console.warn('Connection closed:', statusCode || 'unknown', 'reason:', statusText);
 
@@ -2570,7 +2570,11 @@ async function startSock() {
             }
 
             if (isConflict) {
-                console.warn('Session conflict or timeout detected (code ' + statusCode + '). Stopping auto reconnect to avoid repeated replacement loops.');
+                if (statusCode === DisconnectReason.connectionReplaced || statusCode === 440) {
+                    console.warn('Session conflict detected (code ' + statusCode + '). Stopping auto reconnect to avoid repeated replacement loops.');
+                } else if (statusCode === 405) {
+                    console.warn('Multi-device conflict detected (code 405). Stopping auto reconnect.');
+                }
                 reconnecting = false;
                 broadcastSse({ type: 'status', online: false });
                 broadcastStatus();
