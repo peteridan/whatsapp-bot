@@ -1,0 +1,25 @@
+{
+  "name": "whatsapp-bot",
+  "version": "1.0.0",
+  "description": "A WhatsApp bot powered by Baileys",
+  "main": "bot-core.js",
+  "scripts": {
+    "start": "node bot-core.js",
+    "reset-session": "powershell -ExecutionPolicy Bypass -File .\\scripts\\reset-session.ps1",
+    "pm2:start": "npx pm2 start bot-core.js --name whatsapp-bot",
+    "pm2:stop": "npx pm2 stop whatsapp-bot",
+    "pm2:restart": "npx pm2 restart whatsapp-bot",
+    "pm2:logs": "npx pm2 logs whatsapp-bot --lines 100",
+    "pm2:save": "npx pm2 save"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^7.0.0-rc13",
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.4.2",
+    "qrcode": "^1.5.1",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "devDependencies": {
+    "pm2": "^6.0.14"
+  }
+}

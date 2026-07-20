@@ -1,0 +1,33 @@
+name: whatsapp-bot
+
+services:
+  - name: bot
+    git:
+      branch: main
+      dockerfile_path: ./Dockerfile
+    instance_types:
+      - "nano"
+    regions:
+      - "iad"
+    ports:
+      - port: 3000
+        http:
+          health_checks:
+            - path: /healthz
+              port: 3000
+              scheme: http
+              protocol: http
+              interval: 30s
+              timeout: 5s
+              healthy_threshold: 1
+              unhealthy_threshold: 3
+    volumes:
+      - name: auth-data
+        path: /data
+    envs:
+      - key: PORT
+        value: "3000"
+      - key: BAILEYS_AUTH_PATH
+        value: "/data/.baileys_auth"
+      - key: GROQ_API_KEY
+        secret: whatsapp-bot-groq-api-key

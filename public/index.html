@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Bot Control Panel</title>
+  <meta name="description" content="Control panel for your WhatsApp bot — manage AI, chats, moderation, and status stories." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">WA</div>
+      <div class="brand-text">
+        <h1>Bot Control</h1>
+        <span id="sidebarStatus">Connecting…</span>
+      </div>
+    </div>
+
+    <ul class="nav-links" id="navLinks">
+      <li data-page="dashboard" class="active">
+        <span class="nav-icon">🏠</span>Dashboard
+      </li>
+      <li data-page="chats">
+        <span class="nav-icon">💬</span>Chats
+      </li>
+      <li data-page="moderation">
+        <span class="nav-icon">🛡️</span>Moderation
+      </li>
+      <li data-page="settings">
+        <span class="nav-icon">⚙️</span>Settings
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="status-badge">
+        <span class="dot" id="liveDot"></span>
+        <span id="lastUpdateText">Not yet updated</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════ MAIN CONTENT ══════════════ -->
+  <main class="main">
+
+    <!-- ─────────────── DASHBOARD ─────────────── -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h2>Dashboard</h2>
+        <p>Live overview of your WhatsApp bot</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid-4" style="margin-bottom:14px">
+        <div class="stat-card">
+          <div class="stat-icon">⏱️</div>
+          <div class="stat-value" id="uptime">—</div>
+          <div class="stat-label">Uptime</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✉️</div>
+          <div class="stat-value" id="messagesHandled">—</div>
+          <div class="stat-label">Messages handled</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⌨️</div>
+          <div class="stat-value" id="commandsHandled">—</div>
+          <div class="stat-label">Commands run</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💬</div>
+          <div class="stat-value" id="knownChats">—</div>
+          <div class="stat-label">Known chats</div>
+        </div>
+      </div>
+
+      <!-- Connection + QR -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Connection</div>
+          <div class="conn-info">
+            <div class="conn-row">
+              <span>Status</span>
+              <span id="statusPill" class="status-pill pill-off">● Offline</span>
+            </div>
+            <div class="conn-row"><span>Number</span><strong id="connectedNumber">—</strong></div>
+            <div class="conn-row"><span>Groq API</span><strong id="groqKey">—</strong></div>
+            <div class="conn-row"><span>AI Model</span><strong id="model">—</strong></div>
+            <div class="conn-row"><span>Reconnecting</span><strong id="reconnecting">—</strong></div>
+            <div class="conn-row"><span>Server time</span><strong id="serverTime">—</strong></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">QR Code</div>
+          <div id="qrBox" class="qr-box">
+            <p class="qr-hint">Waiting for QR code…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────── CHATS ─────────────── -->
+    <div class="page" id="page-chats">
+      <div class="page-header">
+        <h2>Chats</h2>
+        <p>All known chats and their settings</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Known Chats</div>
+        <div id="chatList" class="chat-list">
+          <p class="muted">No known chats yet.</p>
+        </div>
+      </div>
+
+      <!-- Schedule message -->
+      <div class="card mt-14">
+        <div class="card-title">Schedule Message</div>
+        <div class="form-row">
+          <div class="field" style="flex:2;min-width:160px">
+            <label>Target chat</label>
+            <select id="scheduleChat"></select>
+          </div>
+          <div class="field" style="min-width:90px;flex:none">
+            <label>Minutes</label>
+            <input type="number" id="scheduleMinutes" min="1" placeholder="e.g. 10" />
+          </div>
+          <div class="field" style="flex:2;min-width:160px">
+            <label>Message</label>
+            <input type="text" id="scheduleText" placeholder="Message text…" />
+          </div>
+          <button id="scheduleBtn" class="btn" style="align-self:flex-end">Schedule</button>
+        </div>
+        <div id="scheduledList" class="list-items"></div>
+      </div>
+    </div>
+
+    <!-- ─────────────── MODERATION ─────────────── -->
+    <div class="page" id="page-moderation">
+      <div class="page-header">
+        <h2>Moderation</h2>
+        <p>Anti-spam, word filters, anti-link, auto-reply, join/leave tracking</p>
+      </div>
+
+      <div class="grid-2">
+        <!-- Chat selector -->
+        <div class="card">
+          <div class="card-title">🎛️ Moderation Controls</div>
+          <div class="field">
+            <label for="modChatSelect">Select chat</label>
+            <select id="modChatSelect"></select>
+          </div>
+          <div class="field mt-10">
+            <label class="switch-row">
+              <div>
+                <div class="switch-row-label">Anti-spam</div>
+                <div class="switch-row-desc">Warn/kick after repeated fast messages</div>
+              </div>
+              <input type="checkbox" id="modAntiSpam" />
+            </label>
+          </div>
+          <div class="field mt-10">
+            <label class="switch-row">
+              <div>
+                <div class="switch-row-label">Anti-link</div>
+                <div class="switch-row-desc">Delete messages containing links</div>
+              </div>
+              <input type="checkbox" id="modAntiLink" />
+            </label>
+          </div>
+          <div class="field mt-10">
+            <label class="switch-row">
+              <div>
+                <div class="switch-row-label">Auto-reply</div>
+                <div class="switch-row-desc">Reply to greetings automatically</div>
+              </div>
+              <input type="checkbox" id="modAutoReply" />
+            </label>
+          </div>
+          <p class="muted mt-8" id="modInfo">Select a chat to manage moderation.</p>
+        </div>
+
+        <!-- Word filters -->
+        <div class="card">
+          <div class="card-title">🚷 Word Filters</div>
+          <p class="muted" style="margin-bottom:10px">Messages containing these words will be deleted.</p>
+          <div class="field">
+            <label for="modWordInput">Word to block</label>
+            <input type="text" id="modWordInput" placeholder="e.g. badword" />
+          </div>
+          <div class="flex gap-8 mt-8">
+            <button id="modWordAdd" class="btn btn-sm">Add word</button>
+            <button id="modWordRefresh" class="btn btn-sm btn-outline">Refresh list</button>
+          </div>
+          <div id="modWordList" class="list-items mt-10"></div>
+        </div>
+
+        <!-- Join/Leave log -->
+        <div class="card mt-14">
+          <div class="card-title">📋 Join / Leave Log</div>
+          <p class="muted" style="margin-bottom:10px">Set a dedicated WhatsApp chat to receive join and leave events from all groups the bot is in.</p>
+          <div class="field">
+            <label for="logChatInput">Log chat ID</label>
+            <input type="text" id="logChatInput" placeholder="e.g. 234xxxxxxxx@s.whatsapp.net" />
+          </div>
+          <div class="flex gap-8 mt-8">
+            <button id="saveLogChat" class="btn btn-sm">Save</button>
+            <button id="clearLogChat" class="btn btn-sm btn-outline">Clear</button>
+          </div>
+          <p class="muted mt-8" id="logChatInfo">No log chat configured.</p>
+          <hr />
+          <p class="muted">Or type <code>!setlogchat</code> inside the target WhatsApp chat.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────── SETTINGS ─────────────── -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <h2>Settings</h2>
+        <p>Global bot configuration and system controls</p>
+      </div>
+
+      <div class="grid-2">
+        <!-- Bot behaviour -->
+        <div class="card">
+          <div class="card-title">Bot Behaviour</div>
+          <label class="switch-row">
+            <div>
+              <div class="switch-row-label">Global AI</div>
+              <div class="switch-row-desc">AI replies in all chats by default</div>
+            </div>
+            <input type="checkbox" id="globalAiToggle" />
+          </label>
+          <label class="switch-row">
+            <div>
+              <div class="switch-row-label">Private mode</div>
+              <div class="switch-row-desc">Only the owner can use commands</div>
+            </div>
+            <input type="checkbox" id="privateToggle" />
+          </label>
+          <label class="switch-row">
+            <div>
+              <div class="switch-row-label">Auto-view status</div>
+              <div class="switch-row-desc">Automatically view incoming statuses</div>
+            </div>
+            <input type="checkbox" id="autoViewStatusToggle" />
+          </label>
+          <label class="switch-row">
+            <div>
+              <div class="switch-row-label">Auto-bypass view-once</div>
+              <div class="switch-row-desc">Forward view-once media to owner</div>
+            </div>
+            <input type="checkbox" id="autoBypassViewOnceToggle" />
+          </label>
+        </div>
+
+        <!-- Theme -->
+        <div class="card">
+          <div class="card-title">Theme</div>
+          <label class="switch-row">
+            <div>
+              <div class="switch-row-label">Dark mode</div>
+              <div class="switch-row-desc">Use dark color scheme</div>
+            </div>
+            <input type="checkbox" id="darkModeToggle" />
+          </label>
+          <div class="field mt-10">
+            <label for="accentColor">Accent color</label>
+            <select id="accentColor">
+              <option value="#25d366">Green</option>
+              <option value="#3b82f6">Blue</option>
+              <option value="#8b5cf6">Purple</option>
+              <option value="#f97316">Orange</option>
+              <option value="#ec4899">Pink</option>
+              <option value="#ef4444">Red</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2 mt-14">
+        <!-- AI prompt -->
+        <div class="card">
+          <div class="card-title">Default AI Prompt</div>
+          <div class="field">
+            <label for="aiPersonality">Personality template</label>
+            <select id="aiPersonality">
+              <option value="">Custom (use text below)</option>
+            </select>
+          </div>
+          <div class="field mt-10">
+            <label for="aiPrompt">Prompt text</label>
+            <textarea id="aiPrompt" rows="5" placeholder="How the bot should behave…"></textarea>
+          </div>
+          <button id="savePrompt" class="btn btn-sm mt-8">Save prompt</button>
+        </div>
+        <!-- Auto-promote -->
+        <div class="card">
+          <div class="card-title">🎖️ Auto-Promote</div>
+          <p class="muted" style="margin-bottom:10px">Users who hit message milestones in a group get auto-promoted to admin. Enable per-group with <code>!autopromo on</code>.</p>
+          <div class="field">
+            <label for="autoPromoThresholds">Promotion thresholds (comma-separated)</label>
+            <input type="text" id="autoPromoThresholds" placeholder="e.g. 100, 500, 1000" />
+          </div>
+          <button id="saveAutoPromo" class="btn btn-sm mt-8">Save thresholds</button>
+          <p class="muted mt-8" id="autoPromoInfo"></p>
+        </div>
+
+        <!-- Broadcast -->
+        <div class="card">
+          <div class="card-title">📢 Broadcast</div>
+          <div class="field">
+            <label for="broadcastText">Message to all known chats</label>
+            <textarea id="broadcastText" rows="4" placeholder="Broadcast text…"></textarea>
+          </div>
+          <button id="sendBroadcast" class="btn btn-w100 mt-8">Send broadcast</button>
+          <p class="muted mt-8" id="broadcastInfo"></p>
+        </div>
+
+        <!-- Keyword triggers -->
+        <div class="card mt-14">
+          <div class="card-title">⚡ Keyword Auto-Replies</div>
+          <p class="muted" style="margin-bottom:10px">Create keyword-triggered replies that bypass the AI. When a message contains the keyword, the bot replies instantly with the predefined text.</p>
+          <div class="form-row">
+            <div class="field" style="flex:1">
+              <input type="text" id="triggerKeyword" placeholder="Keyword (e.g. pricing)" />
+            </div>
+            <div class="field" style="flex:2">
+              <input type="text" id="triggerReply" placeholder="Auto-reply text…" />
+            </div>
+            <button id="addTrigger" class="btn btn-sm" style="align-self:flex-end">Add</button>
+          </div>
+          <div id="triggerList" class="list-items mt-10"></div>
+        </div>
+      </div>
+
+      <!-- System -->
+      <div class="card mt-14">
+        <div class="card-title">⚠️ System</div>
+        <button id="restartBtn" class="btn btn-danger">🔄 Restart bot</button>
+        <p class="muted mt-8">Restart reconnects using the saved session — no QR re-scan needed.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="app.js?v=2"></script>
+</body>
+</html>
