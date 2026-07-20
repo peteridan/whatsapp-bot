@@ -2612,6 +2612,42 @@ const STATIC_ROUTES = {
     '/app.js': { file: 'app.js', type: 'application/javascript; charset=utf-8' }
 };
 
+const MIME = {
+    '.html': 'text/html; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.js': 'application/javascript; charset=utf-8',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon'
+};
+
+function serveStatic(url, req, res) {
+    const route = STATIC_ROUTES[url];
+    if (route) {
+        const filePath = path.join(PUBLIC_DIR, route.file);
+        if (!filePath.startsWith(PUBLIC_DIR) || !fs.existsSync(filePath)) {
+            return false;
+        }
+        res.writeHead(200, { 'Content-Type': route.type, 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' });
+        fs.createReadStream(filePath).pipe(res);
+        return true;
+    }
+
+    const ext = path.extname(url);
+    if (ext && MIME[ext]) {
+        const filePath = path.join(PUBLIC_DIR, url.replace(/^\//, ''));
+        if (!filePath.startsWith(PUBLIC_DIR) || !fs.existsSync(filePath)) {
+            return false;
+        }
+        res.writeHead(200, { 'Content-Type': MIME[ext], 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' });
+        fs.createReadStream(filePath).pipe(res);
+        return true;
+    }
+
+    return false;
+}
+
 async function buildStatus() {
     const connected = Boolean(sock && sock.user);
     const chatIds = Array.from(
@@ -3095,19 +3131,19 @@ async function requestHandler(req, res) {
         return;
     }
 
-    const route = STATIC_ROUTES[url];
-    if (route) {
-        const filePath = path.join(PUBLIC_DIR, route.file);
-        if (!filePath.startsWith(PUBLIC_DIR) || !fs.existsSync(filePath)) {
-            res.writeHead(404, { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' });
-            res.end('Not found');
+    if (url === '/favicon.ico') {
+        const ico = path.join(PUBLIC_DIR, 'favicon.ico');
+        if (fs.existsSync(ico)) {
+            res.writeHead(200, { 'Content-Type': 'image/x-icon', 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' });
+            fs.createReadStream(ico).pipe(res);
             return;
         }
-
-        res.writeHead(200, { 'Content-Type': route.type, 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' });
-        fs.createReadStream(filePath).pipe(res);
+        res.writeHead(204);
+        res.end();
         return;
     }
+
+    if (serveStatic(url, req, res)) return;
 
     res.writeHead(404, { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' });
     res.end('Not found');
