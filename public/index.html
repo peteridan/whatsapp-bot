@@ -8,7 +8,380 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg:          #080d12;
+  --bg-2:        #0b1117;
+  --surface:     #0f1621;
+  --surface-2:   #141d2a;
+  --surface-3:   #1a2333;
+  --text:        #e8f0f8;
+  --text-2:      #9baabb;
+  --accent:      #25d366;
+  --accent-dim:  rgba(37,211,102,.14);
+  --accent-dark: #1cb558;
+  --danger:      #ff4d4d;
+  --danger-dim:  rgba(255,77,77,.14);
+  --warning:     #ffb74d;
+  --border:      #1e2d3d;
+  --border-2:    #243040;
+  --input-bg:    #0c1520;
+  --sidebar-w:  242px;
+  --radius:      12px;
+  --radius-sm:   8px;
+}
+
+[data-theme="light"] {
+  --bg:          #f3f4f6;
+  --bg-2:        #ffffff;
+  --surface:     #ffffff;
+  --surface-2:   #f9fafb;
+  --surface-3:   #f3f4f6;
+  --text:        #111827;
+  --text-2:      #6b7280;
+  --border:      #e5e7eb;
+  --border-2:    #d1d5db;
+  --input-bg:    #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { height: 100%; }
+
+body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  overflow: hidden;
+}
+
+/* ─── Layout ─────────────────────────────────────────── */
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* ─── Sidebar ────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 18px 12px 14px;
+  gap: 4px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 6px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.brand-logo {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent) 0%, #128c4b 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 14px; color: #04130a;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(37,211,102,.28);
+}
+
+.brand-text h1 { font-size: 14px; font-weight: 700; line-height: 1.2; }
+.brand-text span { font-size: 11px; color: var(--text-2); }
+
+/* Nav links */
+.nav-links { list-style: none; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+
+.nav-links li {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; color: var(--text-2); font-size: 13.5px; font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.nav-links li .nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-links li:hover { background: var(--surface-2); color: var(--text); }
+.nav-links li.active { background: var(--accent-dim); color: var(--accent); font-weight: 600; }
+
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 12px 8px 0;
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.status-badge { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); }
+
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--text-2); flex-shrink: 0;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.dot.live { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+/* ─── Main ───────────────────────────────────────────── */
+.main { flex: 1; overflow-y: auto; min-width: 0; }
+
+/* ─── Page header ────────────────────────────────────── */
+.page-header { padding: 26px 28px 0; margin-bottom: 20px; }
+.page-header h2 { font-size: 22px; font-weight: 800; }
+.page-header p { font-size: 13px; color: var(--text-2); margin-top: 4px; }
+
+/* ─── Pages ──────────────────────────────────────────── */
+.page { display: none; padding: 0 28px 48px; animation: fadeIn 0.2s ease; }
+.page.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Grid layouts ───────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+.col-2 { grid-column: span 2; }
+
+/* ─── Cards ──────────────────────────────────────────── */
+.card {
+  background: linear-gradient(160deg, var(--surface) 0%, var(--bg-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.card-title {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .07em;
+  color: var(--text-2); margin-bottom: 14px;
+}
+
+/* ─── Stat cards ─────────────────────────────────────── */
+.stat-card {
+  background: linear-gradient(160deg, var(--surface) 0%, var(--bg-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.stat-card:hover { border-color: var(--border-2); transform: translateY(-1px); }
+.stat-icon { font-size: 22px; margin-bottom: 10px; }
+.stat-value { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1; }
+.stat-label { font-size: 11px; color: var(--text-2); margin-top: 4px; }
+
+/* ─── Connection info ────────────────────────────────── */
+.conn-info { display: flex; flex-direction: column; gap: 8px; }
+.conn-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--text-2); }
+.conn-row strong { color: var(--text); font-weight: 500; }
+
+/* Status pill */
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+}
+.pill-on  { background: var(--accent-dim);  color: var(--accent); }
+.pill-off { background: var(--danger-dim);  color: var(--danger); }
+
+/* ─── QR Box ─────────────────────────────────────────── */
+.qr-box {
+  background: #fff; border-radius: var(--radius-sm);
+  min-height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.qr-box img { width: 100%; height: auto; display: block; }
+.qr-hint { color: #555; font-size: 13px; padding: 16px; text-align: center; }
+
+/* ─── Form elements ──────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label, .field-label { font-size: 12px; color: var(--text-2); font-weight: 500; }
+
+textarea, input[type="text"], input[type="number"], input[type="password"], select {
+  background: var(--input-bg);
+  border: 1px solid var(--border-2);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 14px; font-family: inherit; width: 100%;
+  outline: none; transition: border-color 0.15s;
+}
+textarea:focus, input:focus, select:focus { border-color: var(--accent); }
+textarea { resize: vertical; min-height: 80px; }
+
+/* Toggle switch */
+.switch-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.switch-row:last-of-type { border-bottom: none; }
+.switch-row-label { font-size: 13.5px; font-weight: 500; }
+.switch-row-desc  { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+
+input[type="checkbox"] {
+  width: 38px; height: 20px; appearance: none;
+  background: var(--surface-3); border: 1px solid var(--border-2);
+  border-radius: 999px; cursor: pointer; position: relative; flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+input[type="checkbox"]::after {
+  content: ''; position: absolute;
+  width: 14px; height: 14px; background: var(--text-2);
+  border-radius: 50%; top: 2px; left: 2px;
+  transition: transform 0.2s, background 0.2s;
+}
+input[type="checkbox"]:checked { background: var(--accent-dim); border-color: var(--accent); }
+input[type="checkbox"]:checked::after { transform: translateX(18px); background: var(--accent); }
+
+/* ─── Buttons ────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--accent); color: #04130a;
+  border: none; border-radius: var(--radius-sm);
+  padding: 10px 16px; font-weight: 700; font-size: 14px; font-family: inherit;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
+}
+.btn:hover { background: var(--accent-dark); box-shadow: 0 4px 16px rgba(37,211,102,.22); }
+.btn:active { transform: translateY(1px); }
+
+.btn-sm    { padding: 7px 12px; font-size: 13px; }
+.btn-w100  { width: 100%; }
+
+.btn-outline {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border-2);
+}
+.btn-outline:hover { background: var(--surface-2); border-color: var(--accent); color: var(--accent); box-shadow: none; }
+
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #e23c3c; box-shadow: 0 4px 16px rgba(255,77,77,.22); }
+
+/* ─── HR ─────────────────────────────────────────────── */
+hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+/* ─── Chat list ──────────────────────────────────────── */
+.chat-list { display: flex; flex-direction: column; gap: 8px; max-height: 480px; overflow-y: auto; }
+.chat-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+}
+.chat-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: var(--surface-3); }
+.chat-id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.chat-name { font-size: 13px; color: var(--text); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-jid { font-size: 11px; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-tags { display: flex; gap: 5px; flex-wrap: wrap; flex-shrink: 0; }
+.tag { font-size: 10px; padding: 2px 7px; border-radius: 999px; background: var(--surface-3); color: var(--text-2); font-weight: 500; }
+.tag.on   { background: var(--accent-dim);              color: var(--accent); }
+.tag.warn { background: rgba(255,183,77,.15);            color: var(--warning); }
+
+/* ─── Buttons inside lists ───────────────────────────── */
+.mini-btn {
+  font-size: 12px; padding: 5px 10px; border-radius: 6px;
+  border: 1px solid var(--border-2); background: var(--surface);
+  color: var(--text-2); cursor: pointer; font-family: inherit; flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+.mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ─── List rows (scheduled / quotes) ────────────────── */
+.list-items { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.list-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13px;
+}
+.list-row .txt  { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.list-row .meta { font-size: 11px; color: var(--text-2); flex-shrink: 0; }
+
+/* ─── Inline form row ────────────────────────────────── */
+.form-row { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
+.form-row .field { flex: 1; min-width: 120px; }
+.form-row .btn { flex-shrink: 0; }
+
+/* ─── Alert banners ──────────────────────────────────── */
+.alert { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; border: 1px solid; }
+.alert-warning { background: rgba(255,183,77,.1); border-color: rgba(255,183,77,.3); color: var(--warning); }
+.alert-info    { background: var(--accent-dim);   border-color: rgba(37,211,102,.3);  color: var(--accent); }
+
+/* ─── Muted text ─────────────────────────────────────── */
+.muted { color: var(--text-2); font-size: 12px; }
+code { font-family: 'Courier New', monospace; background: var(--surface-3); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+
+/* ─── Toast ──────────────────────────────────────────── */
+.toast {
+  position: fixed; left: 50%; bottom: 28px;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface-2); border: 1px solid var(--border-2); color: var(--text);
+  padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  max-width: 90vw; z-index: 999;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.err  { border-color: var(--danger); color: #ffb3b3; }
+
+/* ─── Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-2); }
+
+/* ─── Spacing helpers ────────────────────────────────── */
+.mt-8  { margin-top: 8px; }
+.mt-10 { margin-top: 10px; }
+.mt-14 { margin-top: 14px; }
+.gap-8 { gap: 8px; }
+.flex  { display: flex; }
+.flex-end { justify-content: flex-end; }
+
+/* ─── Mobile (bottom tab bar) ────────────────────────── */
+@media (max-width: 768px) {
+  html, body { overflow: auto; height: auto; }
+
+  .app { flex-direction: column; height: auto; min-height: 100vh; }
+
+  .sidebar {
+    width: 100%; flex-direction: row;
+    padding: 8px 10px env(safe-area-inset-bottom, 0);
+    border-right: none; border-top: 1px solid var(--border);
+    overflow-x: auto; overflow-y: hidden;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    z-index: 100; gap: 2px;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+  }
+
+  .sidebar-brand, .sidebar-footer { display: none; }
+
+  .nav-links {
+    flex-direction: row; flex: none; gap: 2px;
+    width: 100%; justify-content: space-around;
+  }
+
+  .nav-links li {
+    flex-direction: column; gap: 3px;
+    padding: 8px 10px; font-size: 10px; text-align: center; min-width: 0;
+  }
+
+  .nav-links li .nav-icon { width: auto; font-size: 18px; }
+
+  .main { order: 1; height: auto; overflow-y: auto; padding-bottom: 80px; }
+
+  .page-header { padding: 18px 16px 0; margin-bottom: 14px; }
+  .page { padding: 0 16px 48px; }
+
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .col-2 { grid-column: auto; }
+}
+  </style>
 </head>
 <body>
 <div class="app">
@@ -354,6 +727,639 @@
 </div>
 
 <div id="toast" class="toast"></div>
-<script src="app.js?v=2"></script>
+<script>
+const POLL_MS = 1000;
+let lastQrToken = null;
+let lastQrUpdatedAt = 0;
+let lastChatKey = '';
+let statusCache = null;
+let eventSource = null;
+
+const el = (id) => document.getElementById(id);
+
+function toast(msg, isErr) {
+    const t = el('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isErr ? ' err' : '');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { t.className = 'toast'; }, 2800);
+}
+
+async function api(path, body) {
+    const res = await fetch(path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body || {})
+    });
+    let data = {};
+    try { data = await res.json(); } catch { /* ignore */ }
+    if (!data.ok) throw new Error(data.error || ('HTTP ' + res.status));
+    return data;
+}
+
+function fmtUptime(s) {
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = Math.floor(s % 60);
+    const p = [];
+    if (d) p.push(d + 'd');
+    if (h) p.push(h + 'h');
+    if (m) p.push(m + 'm');
+    p.push(sec + 's');
+    return p.join(' ');
+}
+
+function esc(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function switchPage(page) {
+    document.querySelectorAll('.page').forEach((p) => p.classList.remove('active'));
+    document.querySelectorAll('#navLinks li').forEach((li) => li.classList.remove('active'));
+    const target = el('page-' + page);
+    if (target) target.classList.add('active');
+    const nav = document.querySelector(`#navLinks li[data-page="${page}"]`);
+    if (nav) nav.classList.add('active');
+}
+
+document.querySelectorAll('#navLinks li').forEach((li) => {
+    li.addEventListener('click', () => switchPage(li.dataset.page));
+});
+
+function renderConnection(d) {
+    const pill = el('statusPill');
+    if (pill) {
+        if (d.online) {
+            pill.textContent = '● Online';
+            pill.className = 'status-pill pill-on';
+        } else {
+            pill.textContent = '● Offline';
+            pill.className = 'status-pill pill-off';
+        }
+    }
+
+    const connectedNumber = el('connectedNumber');
+    if (connectedNumber) connectedNumber.textContent = d.connectedNumber || '—';
+    const groqKey = el('groqKey');
+    if (groqKey) groqKey.textContent = d.groqKeySet ? '✓ set' : '✗ missing';
+    const model = el('model');
+    if (model) model.textContent = d.model || '—';
+    const reconnecting = el('reconnecting');
+    if (reconnecting) reconnecting.textContent = d.reconnecting ? 'yes' : 'no';
+    const serverTime = el('serverTime');
+    if (serverTime) serverTime.textContent = d.serverTime ? new Date(d.serverTime).toLocaleString() : '—';
+    const sidebarStatus = el('sidebarStatus');
+    if (sidebarStatus) sidebarStatus.textContent = d.connectedNumber || (d.online ? 'Connected' : 'Offline');
+
+    const liveDot = el('liveDot');
+    if (liveDot) liveDot.className = d.online ? 'dot live' : 'dot';
+
+    const qrBox = el('qrBox');
+    if (!qrBox) return;
+    if (d.online) {
+        lastQrToken = null;
+        lastQrUpdatedAt = 0;
+        qrBox.innerHTML = '<p class="qr-hint">✅ Connected — no QR needed.</p>';
+    } else if (d.qrAvailable) {
+        if (d.qrToken !== lastQrToken || d.qrUpdatedAt !== lastQrUpdatedAt) {
+            lastQrToken = d.qrToken;
+            lastQrUpdatedAt = d.qrUpdatedAt || 0;
+            qrBox.innerHTML = '';
+            const img = document.createElement('img');
+            img.alt = 'WhatsApp QR code';
+            img.src = '/qr?t=' + Date.now();
+            qrBox.appendChild(img);
+        }
+    } else {
+        lastQrToken = null;
+        lastQrUpdatedAt = 0;
+        qrBox.innerHTML = '<p class="qr-hint">Waiting for QR code…</p>';
+    }
+}
+
+function renderStats(d) {
+    const uptime = el('uptime');
+    const messagesHandled = el('messagesHandled');
+    const commandsHandled = el('commandsHandled');
+    const knownChats = el('knownChats');
+    if (uptime) uptime.textContent = fmtUptime(d.uptimeSeconds || 0);
+    if (messagesHandled) messagesHandled.textContent = d.messagesHandled ?? 0;
+    if (commandsHandled) commandsHandled.textContent = d.commandsHandled ?? 0;
+    if (knownChats) knownChats.textContent = d.knownChats ?? 0;
+}
+
+function renderSettings(d) {
+    const globalAiToggle = el('globalAiToggle');
+    const privateToggle = el('privateToggle');
+    const autoViewStatusToggle = el('autoViewStatusToggle');
+    const autoBypassViewOnceToggle = el('autoBypassViewOnceToggle');
+    if (globalAiToggle) globalAiToggle.checked = Boolean(d.globalAiEnabled);
+    if (privateToggle) privateToggle.checked = Boolean(d.privateMode);
+    if (autoViewStatusToggle) autoViewStatusToggle.checked = Boolean(d.autoViewStatus);
+    if (autoBypassViewOnceToggle) autoBypassViewOnceToggle.checked = Boolean(d.autoBypassViewOnce);
+
+    const darkModeToggle = el('darkModeToggle');
+    if (d.theme && darkModeToggle) {
+        darkModeToggle.checked = d.theme.mode !== 'light';
+        const accent = el('accentColor');
+        if (accent) accent.value = d.theme.accent || '#25d366';
+        applyTheme(d.theme.mode, d.theme.accent);
+    }
+
+    const prompt = el('aiPrompt');
+    if (prompt && document.activeElement !== prompt && prompt.value !== (d.defaultAiPrompt || '')) {
+        prompt.value = d.defaultAiPrompt || '';
+    }
+
+    const sel = el('aiPersonality');
+    if (sel && d.aiPersonalities) {
+        const current = d.defaultAiPersonality || '';
+        if (!sel.options.length || sel.dataset.key !== JSON.stringify(d.aiPersonalities)) {
+            sel.dataset.key = JSON.stringify(d.aiPersonalities);
+            sel.innerHTML = '<option value="">Custom (use text below)</option>' +
+                d.aiPersonalities.map(p => `<option value="${esc(p.id)}" data-prompt="${esc(p.prompt)}">${esc(p.name)}</option>`).join('');
+        }
+        if (sel.value !== current) {
+            sel.value = current;
+        }
+    }
+
+    const thresh = el('autoPromoThresholds');
+    if (thresh && document.activeElement !== thresh) {
+        thresh.value = (d.autoPromoThresholds || [100, 500, 1000]).join(', ');
+    }
+
+    const logInput = el('logChatInput');
+    if (logInput && document.activeElement !== logInput) {
+        logInput.value = d.logChatId || '';
+    }
+    const logChatInfo = el('logChatInfo');
+    if (logChatInfo) {
+        logChatInfo.textContent = d.logChatId
+            ? '📌 Currently logging to: ' + d.logChatId
+            : 'No log chat configured.';
+    }
+
+    renderTriggers(d.keywordTriggers || []);
+}
+
+function renderChats(d) {
+    const wrap = el('chatList');
+    const list = d.knownChatsList || [];
+    if (!wrap) return;
+    if (!list.length) {
+        wrap.innerHTML = '<p class="muted">No known chats yet.</p>';
+        return;
+    }
+    const key = list.map((c) => c.chatId + (c.muted ? 'M' : '') + (c.aiEnabled ? 'A' : '') + (c.antiSpam ? 'S' : '')).join('|');
+    if (key === lastChatKey) return;
+    lastChatKey = key;
+
+    wrap.innerHTML = list.map((c) => {
+        const tags = [
+            c.aiEnabled  ? '<span class="tag on">AI</span>'        : '<span class="tag">AI off</span>',
+            c.autoReply  ? '<span class="tag on">Auto</span>'      : '',
+            c.antiLink   ? '<span class="tag on">AntiLink</span>'  : '',
+            c.antiSpam   ? '<span class="tag on">AntiSpam</span>'  : '',
+            c.muted      ? '<span class="tag warn">Muted</span>'   : ''
+        ].filter(Boolean).join('');
+        return `<div class="chat-row">
+            <img class="chat-avatar" data-jid="${esc(c.chatId)}" alt="" />
+            <div class="chat-id">
+                <div class="chat-name">${esc(c.displayName || c.chatId)}</div>
+                <div class="chat-jid">${esc(c.chatId)}</div>
+            </div>
+            <div class="chat-tags">${tags}</div>
+            <button class="mini-btn" data-chat="${esc(c.chatId)}" data-action="${c.muted ? 'unmute' : 'mute'}">
+                ${c.muted ? 'Unmute' : 'Mute'}
+            </button>
+        </div>`;
+    }).join('');
+
+    loadProfilePictures();
+}
+
+async function loadProfilePictures() {
+    const images = document.querySelectorAll('.chat-avatar');
+    for (const img of images) {
+        const jid = img.dataset.jid;
+        if (!jid || jid === 'status@broadcast') continue;
+        try {
+            const data = await api('/api/profile-picture', { jid });
+            if (data.url) {
+                img.src = data.url;
+            }
+        } catch (e) {
+            // leave empty on error
+        }
+    }
+}
+
+function renderScheduled(d) {
+    const list = d.scheduledMessages || [];
+    const wrap = el('scheduledList');
+    if (!wrap) {
+        return;
+    }
+    if (!list.length) {
+        wrap.innerHTML = '<p class="muted">No scheduled messages.</p>';
+    } else {
+        wrap.innerHTML = list.map((m) => `<div class="list-row">
+            <div style="min-width:0;flex:1">
+                <div class="txt">${esc(m.text)}</div>
+                <div class="meta">${esc(m.chatId)} · in ${Math.max(0, Math.round((m.sendAt - Date.now()) / 60000))}m</div>
+            </div>
+            <button class="mini-btn" data-sched-id="${m.id}">Clear</button>
+        </div>`).join('');
+    }
+    const sel = el('scheduleChat');
+    if (!sel) return;
+    const chats = d.knownChatsList || [];
+    if (chats.length && (!sel.options.length || sel.dataset.key !== String(chats.length))) {
+        sel.dataset.key = String(chats.length);
+        sel.innerHTML = chats.map((c) => `<option value="${esc(c.chatId)}">${esc(c.chatId)}</option>`).join('');
+    }
+}
+
+function renderQuotes(d) {
+    const wrap = el('quoteList');
+    if (!wrap) return;
+    const list = d.quotes || [];
+    if (!list.length) {
+        wrap.innerHTML = '<p class="muted">No quotes saved.</p>';
+        return;
+    }
+    wrap.innerHTML = list.slice(-15).reverse().map((q) => `<div class="list-row">
+        <div style="min-width:0;flex:1">
+            <div class="txt">"${esc(q.text)}"</div>
+            <div class="meta">${esc(q.sender || 'unknown')}</div>
+        </div>
+    </div>`).join('');
+}
+
+function renderTriggers(list) {
+    const wrap = el('triggerList');
+    if (!wrap) return;
+    if (!list.length) {
+        wrap.innerHTML = '<p class="muted">No keyword triggers configured.</p>';
+        return;
+    }
+    wrap.innerHTML = list.map((t) => `<div class="list-row">
+        <div style="min-width:0;flex:1">
+            <div class="txt"><strong>${esc(t.keyword)}</strong></div>
+            <div class="meta">${esc(t.reply)}</div>
+        </div>
+        <button class="mini-btn" data-trigger-id="${t.id}">Delete</button>
+    </div>`).join('');
+}
+
+function renderAll(d) {
+    renderConnection(d);
+    renderStats(d);
+    renderSettings(d);
+    renderChats(d);
+    renderScheduled(d);
+    renderQuotes(d);
+    renderTriggers(d.keywordTriggers || []);
+    el('lastUpdateText').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    refreshModerationChatOptions();
+    const modChat = el('modChatSelect');
+    if (modChat && modChat.value) applyModerationState(modChat.value);
+}
+
+async function refresh() {
+    try {
+        console.log('refresh: fetching /api/status');
+        const res = await fetch('/api/status');
+        console.log('refresh: status', res.status);
+        if (!res.ok) {
+            console.log('refresh: bad response');
+            return;
+        }
+        statusCache = await res.json();
+        console.log('refresh: data', statusCache);
+        renderAll(statusCache);
+        el('liveDot').className = 'dot live';
+    } catch (e) {
+        console.error('refresh failed', e);
+        el('liveDot').className = 'dot';
+    }
+}
+
+async function act(fn, okMsg, errMsg, sourceEl) {
+    const prevChecked = sourceEl ? sourceEl.checked : undefined;
+    try {
+        await fn();
+        if (okMsg) toast(okMsg);
+        await refresh();
+    } catch (e) {
+        if (sourceEl && prevChecked !== undefined) {
+            sourceEl.checked = !prevChecked;
+            if (sourceEl.dataset.prevValue !== undefined) {
+                sourceEl.value = sourceEl.dataset.prevValue;
+            }
+        }
+        toast((errMsg ? errMsg + ': ' : '') + e.message, true);
+    }
+}
+
+function applyTheme(mode, accent) {
+    document.documentElement.setAttribute('data-theme', mode);
+    if (accent) {
+        document.documentElement.style.setProperty('--accent', accent);
+        document.documentElement.style.setProperty('--accent-dim', accent + '22');
+    }
+}
+
+el('darkModeToggle').addEventListener('change', (e) => {
+    const mode = e.target.checked ? 'dark' : 'light';
+    const accent = el('accentColor').value;
+    act(() => api('/api/settings/theme', { mode, accent }),
+        'Theme updated', 'Could not update theme', e.target);
+});
+
+el('accentColor').addEventListener('change', (e) => {
+    const mode = el('darkModeToggle').checked ? 'dark' : 'light';
+    act(() => api('/api/settings/theme', { mode, accent: e.target.value }),
+        'Accent color updated', 'Could not update accent', e.target);
+});
+el('globalAiToggle').addEventListener('change', (e) =>
+    act(() => api('/api/settings/global-ai', { enabled: e.target.checked }),
+        'Global AI ' + (e.target.checked ? 'enabled' : 'disabled'),
+        'Could not change Global AI', e.target));
+
+el('privateToggle').addEventListener('change', (e) =>
+    act(() => api('/api/settings/private', { enabled: e.target.checked }),
+        'Private mode ' + (e.target.checked ? 'on' : 'off'),
+        'Could not change private mode', e.target));
+
+el('autoViewStatusToggle').addEventListener('change', (e) =>
+    act(() => api('/api/settings/auto-view-status', { enabled: e.target.checked }),
+        'Auto-view status ' + (e.target.checked ? 'on' : 'off'),
+        'Could not change auto-view status', e.target));
+
+el('autoBypassViewOnceToggle').addEventListener('change', (e) =>
+    act(() => api('/api/settings/auto-bypass-view-once', { enabled: e.target.checked }),
+        'Auto-bypass view-once ' + (e.target.checked ? 'on' : 'off'),
+        'Could not change auto-bypass view-once', e.target));
+
+el('savePrompt').addEventListener('click', () =>
+    act(() => api('/api/settings/ai-prompt', { text: el('aiPrompt').value, personality: el('aiPersonality').value }),
+        'AI prompt saved', 'Could not save prompt'));
+
+const personalitySelect = el('aiPersonality');
+if (personalitySelect) {
+    personalitySelect.addEventListener('change', () => {
+        const val = personalitySelect.value;
+        const promptEl = el('aiPrompt');
+        if (val && promptEl) {
+            const opt = personalitySelect.querySelector(`option[value="${val}"]`);
+            if (opt) {
+                promptEl.value = opt.dataset.prompt || '';
+                act(() => api('/api/settings/ai-prompt', { text: promptEl.value, personality: val }),
+                    'Personality applied', 'Could not apply personality');
+            }
+        }
+    });
+}
+
+el('saveAutoPromo').addEventListener('click', () => {
+    const raw = el('autoPromoThresholds').value;
+    const thresholds = raw.split(/[,\s]+/).map(Number).filter((n) => n > 0);
+    if (!thresholds.length) { toast('Enter at least one number', true); return; }
+    act(() => api('/api/autopromo/thresholds', { thresholds }),
+        'Thresholds saved ✅', 'Could not save');
+});
+
+el('sendBroadcast').addEventListener('click', async () => {
+    const text = el('broadcastText').value.trim();
+    if (!text) { toast('Enter broadcast text', true); return; }
+    try {
+        const r = await api('/api/broadcast', { text });
+        toast('Broadcast sent to ' + r.sent + '/' + r.total + ' chats');
+        el('broadcastText').value = '';
+        el('broadcastInfo').textContent = 'Last sent to ' + r.sent + ' chats';
+        refresh();
+    } catch (e) {
+        toast('Broadcast failed: ' + e.message, true);
+    }
+});
+
+el('restartBtn').addEventListener('click', () => {
+    if (!confirm('Restart the bot? It will reconnect automatically.')) return;
+    act(() => api('/api/restart', {}), 'Restarting…', 'Could not restart');
+});
+
+el('chatList').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-chat]');
+    if (!btn) return;
+    const chatId  = btn.dataset.chat;
+    const muted   = btn.dataset.action === 'mute';
+    act(() => api('/api/chat/mute', { chatId, muted }),
+        muted ? 'Chat muted' : 'Chat unmuted', 'Could not update chat');
+});
+
+el('scheduleBtn').addEventListener('click', () => {
+    const chatId  = el('scheduleChat').value;
+    const minutes = Number(el('scheduleMinutes').value);
+    const text    = el('scheduleText').value.trim();
+    if (!minutes || !text) { toast('Minutes and text required', true); return; }
+    act(() => api('/api/schedule', { chatId, minutes, text }),
+        'Message scheduled', 'Could not schedule').then(() => {
+            el('scheduleText').value = '';
+            el('scheduleMinutes').value = '';
+        });
+});
+
+el('scheduledList').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-sched-id]');
+    if (!btn) return;
+    act(() => api('/api/scheduled/clear', { id: Number(btn.dataset.schedId) }),
+        'Scheduled message cleared', 'Could not clear');
+});
+
+const modChatSelect = el('modChatSelect');
+const modAntiSpam = el('modAntiSpam');
+const modAntiLink = el('modAntiLink');
+const modAutoReply = el('modAutoReply');
+const modInfo = el('modInfo');
+const modWordInput = el('modWordInput');
+const modWordList = el('modWordList');
+
+function refreshModerationChatOptions() {
+    if (!modChatSelect) return;
+    const list = statusCache?.knownChatsList || [];
+    if (!modChatSelect.options.length || String(modChatSelect.dataset.key) !== String(list.length)) {
+        modChatSelect.dataset.key = String(list.length);
+        modChatSelect.innerHTML = list.map((c) => `<option value="${esc(c.chatId)}">${esc(c.displayName || c.chatId)}</option>`).join('');
+    }
+}
+
+function applyModerationState(chatId) {
+    if (!chatId || !statusCache) return;
+    const chat = (statusCache.knownChatsList || []).find((c) => c.chatId === chatId);
+    if (!chat) return;
+    if (modAntiSpam) modAntiSpam.checked = Boolean(chat.antiSpam);
+    if (modAntiLink) modAntiLink.checked = Boolean(chat.antiLink);
+    if (modAutoReply) modAutoReply.checked = Boolean(chat.autoReply);
+    if (modInfo) modInfo.textContent = 'Managing: ' + (chat.displayName || chatId);
+    renderModerationWordList(chatId);
+}
+
+async function renderModerationWordList(chatId) {
+    if (!modWordList || !chatId) return;
+    try {
+        const data = await api('/api/moderation/wordfilter', { chatId });
+        const filters = data.filters || [];
+        if (!filters.length) {
+            modWordList.innerHTML = '<p class="muted">No blocked words.</p>';
+            return;
+        }
+        modWordList.innerHTML = filters.map((word) => `<div class="list-row">
+            <div style="min-width:0;flex:1"><div class="txt">${esc(word)}</div></div>
+            <button class="mini-btn" data-mod-word="${esc(word)}">Remove</button>
+        </div>`).join('');
+    } catch (e) {
+        modWordList.innerHTML = '';
+    }
+}
+
+if (modChatSelect) {
+    modChatSelect.addEventListener('change', () => applyModerationState(modChatSelect.value));
+}
+
+if (modAntiSpam) {
+    modAntiSpam.addEventListener('change', (e) => {
+        const chatId = modChatSelect?.value;
+        if (!chatId) return;
+        act(() => api('/api/moderation/antispam', { chatId, enabled: e.target.checked }),
+            'Anti-spam ' + (e.target.checked ? 'enabled' : 'disabled'), 'Could not update anti-spam', e.target);
+    });
+}
+
+if (modAntiLink) {
+    modAntiLink.addEventListener('change', (e) => {
+        const chatId = modChatSelect?.value;
+        if (!chatId) return;
+        act(() => api('/api/moderation/antilink', { chatId, enabled: e.target.checked }),
+            'Anti-link ' + (e.target.checked ? 'enabled' : 'disabled'), 'Could not update anti-link', e.target);
+    });
+}
+
+if (modAutoReply) {
+    modAutoReply.addEventListener('change', (e) => {
+        const chatId = modChatSelect?.value;
+        if (!chatId) return;
+        act(() => api('/api/moderation/autoreply', { chatId, enabled: e.target.checked }),
+            'Auto-reply ' + (e.target.checked ? 'enabled' : 'disabled'), 'Could not update auto-reply', e.target);
+    });
+}
+
+const modWordAdd = el('modWordAdd');
+if (modWordAdd) {
+    modWordAdd.addEventListener('click', async () => {
+        const chatId = modChatSelect?.value;
+        const word = modWordInput?.value.trim();
+        if (!chatId) return;
+        if (!word) { toast('Enter a word to block', true); return; }
+        await api('/api/moderation/wordfilter', { chatId, action: 'add', word });
+        const input = modWordInput;
+        if (input) input.value = '';
+        renderModerationWordList(chatId);
+    });
+}
+
+const modWordRefresh = el('modWordRefresh');
+if (modWordRefresh) {
+    modWordRefresh.addEventListener('click', () => {
+        const chatId = modChatSelect?.value;
+        if (!chatId) return;
+        renderModerationWordList(chatId);
+    });
+}
+
+if (modWordList) {
+    modWordList.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-mod-word]');
+        if (!btn) return;
+        const chatId = modChatSelect?.value;
+        const word = btn.dataset.modWord;
+        if (!chatId || !word) return;
+        await api('/api/moderation/wordfilter', { chatId, action: 'remove', word });
+        renderModerationWordList(chatId);
+    });
+}
+
+el('saveLogChat').addEventListener('click', () => {
+    const chatId = el('logChatInput').value.trim();
+    if (!chatId) { toast('Enter a chat ID', true); return; }
+    act(() => api('/api/logchat', { chatId }),
+        'Log chat saved ✅', 'Could not save log chat');
+});
+
+el('clearLogChat').addEventListener('click', () =>
+    act(() => api('/api/logchat', { chatId: '' }),
+        'Log chat cleared', 'Could not clear'));
+
+const saveQuoteBtn = el('saveQuote');
+if (saveQuoteBtn) {
+    saveQuoteBtn.addEventListener('click', () => {
+        const text = el('quoteText').value.trim();
+        if (!text) { toast('Enter quote text', true); return; }
+        act(() => api('/api/quotes/save', { text }),
+            'Quote saved', 'Could not save quote')
+            .then(() => { const q = el('quoteText'); if (q) q.value = ''; });
+    });
+}
+
+const clearQuotesBtn = el('clearQuotes');
+if (clearQuotesBtn) {
+    clearQuotesBtn.addEventListener('click', () =>
+        act(() => api('/api/quotes/clear', {}),
+            'All quotes cleared', 'Could not clear quotes'));
+}
+
+el('addTrigger').addEventListener('click', () => {
+    const keyword = el('triggerKeyword').value.trim().toLowerCase();
+    const reply = el('triggerReply').value.trim();
+    if (!keyword || !reply) { toast('Keyword and reply required', true); return; }
+    act(() => api('/api/triggers', { action: 'add', keyword, reply }),
+        'Trigger added', 'Could not add trigger').then(() => {
+            el('triggerKeyword').value = '';
+            el('triggerReply').value = '';
+        });
+});
+
+el('triggerList').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-trigger-id]');
+    if (!btn) return;
+    act(() => api('/api/triggers', { action: 'delete', id: Number(btn.dataset.triggerId) }),
+        'Trigger deleted', 'Could not delete trigger');
+});
+
+refresh();
+setInterval(refresh, POLL_MS);
+
+if (typeof EventSource !== 'undefined') {
+    eventSource = new EventSource('/api/events');
+    eventSource.onmessage = (event) => {
+        try {
+            const msg = JSON.parse(event.data);
+            if (msg.type === 'status') {
+                statusCache = { ...(statusCache || {}), ...msg };
+                renderAll(statusCache);
+            }
+        } catch {
+            /* ignore malformed events */
+        }
+    };
+    eventSource.onerror = () => {
+        el('liveDot').className = 'dot';
+    };
+}
+  </script>
 </body>
 </html>
