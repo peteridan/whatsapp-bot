@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: whatsapp-bot
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    disk:
+      name: auth-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: PORT
+        value: "3000"
+      - key: BAILEYS_AUTH_PATH
+        value: /data/.baileys_auth
+      - key: GROQ_API_KEY
+        fromSecret: whatsapp-bot-groq-api-key
