@@ -4,6 +4,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         fonts-liberation \
+        ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
