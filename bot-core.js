@@ -2581,6 +2581,26 @@ async function startSock() {
                 return;
             }
 
+            if (statusCode === 428) {
+                console.warn('Connection terminated (428). Attempting quick reconnect...');
+                if (!reconnecting) {
+                    reconnecting = true;
+                    reconnectTimer = setTimeout(async () => {
+                        reconnectTimer = null;
+                        try {
+                            await startSock();
+                        } catch (error) {
+                            console.error('Quick reconnect after 428 failed:', error);
+                        } finally {
+                            reconnecting = false;
+                        }
+                    }, 3000);
+                }
+                broadcastSse({ type: 'status', online: false });
+                broadcastStatus();
+                return;
+            }
+
             if (!reconnecting) {
                 reconnecting = true;
                 reconnectAttempts += 1;
