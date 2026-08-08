@@ -494,7 +494,7 @@
         wrap.innerHTML = '<p class="text-sm text-gray-500">No known chats yet.</p>';
         return;
       }
-      const key = list.map((c) => c.chatId + (c.muted ? 'M' : '') + (c.aiEnabled ? 'A' : '') + (c.antiSpam ? 'S' : '')).join('|');
+      const key = list.map((c) => c.chatId + (c.muted ? 'M' : '') + (c.aiEnabled ? 'A' : '') + (c.antiLink ? 'L' : '') + (c.antiSpam ? 'S' : '')).join('|');
       if (key === lastChatKey) return;
       lastChatKey = key;
 
@@ -507,6 +507,7 @@
           c.muted ? '<span class="text-xs px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400">Muted</span>' : ''
         ].filter(Boolean).join('');
         return `<div class="flex items-center gap-3 p-3 bg-[#141d2a] border border-gray-800 rounded-lg">
+          <img class="chat-avatar w-9 h-9 rounded-full object-cover flex-shrink-0 bg-[#1a2333]" data-jid="${esc(c.chatId)}" alt="" />
           <div class="flex-1 min-w-0">
             <div class="text-sm text-gray-200 font-medium truncate">${esc(c.displayName || c.chatId)}</div>
             <div class="text-xs text-gray-500 truncate">${esc(c.chatId)}</div>
