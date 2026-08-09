@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,8 +16,10 @@
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
-            surface: '#0f1621',
-            panel: '#0b1117'
+            ink: '#070a12',
+            panel: '#0d1320',
+            surface: '#111a2b',
+            line: '#1c2840'
           }
         }
       }
@@ -25,52 +27,176 @@
   </script>
   <style>
     :root {
-      --bg: #080d12;
-      --surface: #0f1621;
-      --accent: #25d366;
-      --accent-dim: rgba(37,211,102,.14);
+      --bg: #070a12;
+      --panel: #0d1320;
+      --surface: #111a2b;
+      --line: #1c2840;
+      --muted: #8a98b3;
+      --accent: #10b981;
+      --accent2: #6366f1;
+      --accent-dim: rgba(16,185,129,.14);
       --danger: #ff4d4d;
     }
     [data-theme="light"] {
-      --bg: #f3f4f6;
+      --bg: #f4f6fb;
+      --panel: #ffffff;
       --surface: #ffffff;
-      --accent: #16a34a;
-      --accent-dim: rgba(22,163,74,.14);
+      --line: #e3e8f0;
+      --muted: #5b6678;
+      --accent: #059669;
+      --accent2: #4f46e5;
+      --accent-dim: rgba(5,150,105,.14);
       --danger: #dc2626;
     }
+    html, body { background: var(--bg); }
+    body {
+      color: #e6ecf5;
+      background:
+        radial-gradient(900px 500px at 12% -8%, rgba(99,102,241,.10), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(16,185,129,.08), transparent 55%),
+        var(--bg);
+    }
+    [data-theme="light"] body {
+      color: #0f172a;
+      background:
+        radial-gradient(900px 500px at 12% -8%, rgba(99,102,241,.10), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(16,185,129,.08), transparent 55%),
+        var(--bg);
+    }
+    .glass {
+      background: rgba(13,19,32,.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+    }
+    [data-theme="light"] .glass {
+      background: rgba(255,255,255,.78);
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+    }
+    .grad-text {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .mini-btn {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--muted);
+      transition: all .15s ease;
+    }
+    .mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .nav-item {
+      display: flex; align-items: center; gap: .6rem;
+      width: 100%; text-align: left;
+      padding: .6rem .75rem;
+      border-radius: .75rem;
+      font-size: .875rem; font-weight: 600;
+      color: var(--muted);
+      transition: all .15s ease;
+    }
+    .nav-item:hover {
+      background: rgba(255,255,255,.04);
+      color: #cdd7e8;
+    }
+    [data-theme="light"] .nav-item:hover { background: rgba(0,0,0,.04); color: #1f2937; }
+    .nav-item.active {
+      color: #fff;
+      background: linear-gradient(90deg, var(--accent-dim), transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent) inset;
+    }
+    [data-theme="light"] .nav-item.active { color: #06281d; }
+    .icon-pill {
+      width: 2rem; height: 2rem; flex: 0 0 auto;
+      display: grid; place-items: center;
+      border-radius: .65rem;
+      background: rgba(255,255,255,.05);
+      font-size: .95rem;
+    }
+    .nav-item.active .icon-pill {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+    }
+    .btn {
+      background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--accent2)));
+      color: #04130d; font-weight: 700;
+      border-radius: .6rem;
+      transition: filter .15s ease, transform .05s ease;
+    }
+    .btn:hover { filter: brightness(1.08); }
+    .btn:active { transform: translateY(1px); }
+    [data-theme="light"] .btn { color: #fff; }
+    .btn-ghost {
+      background: var(--panel); border: 1px solid var(--line);
+      color: var(--muted); border-radius: .6rem; transition: all .15s ease;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .field {
+      background: var(--panel); border: 1px solid var(--line);
+      color: inherit; border-radius: .6rem;
+    }
+    .field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+    .toggle {
+      width: 2.5rem; height: 1.25rem; border-radius: 999px;
+      background: var(--line); appearance: none; cursor: pointer; position: relative;
+      transition: background .15s ease; flex: 0 0 auto;
+    }
+    .toggle::after {
+      content: ""; position: absolute; top: 2px; left: 2px;
+      width: 1rem; height: 1rem; border-radius: 999px; background: #cdd7e8;
+      transition: transform .15s ease;
+    }
+    .toggle:checked {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+    .toggle:checked::after { transform: translateX(1.25rem); background: #fff; }
+    .pill-off { background: rgba(255,77,77,.12); color: #ff8080; }
+    .pill-on { background: var(--accent-dim); color: var(--accent); }
+    .stat-num { font-size: 1.65rem; font-weight: 800; letter-spacing: -.02em; }
+    .label { color: var(--muted); }
+    .chat-avatar { background: var(--line); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
   </style>
 </head>
-<body class="bg-[#080d12] text-gray-100 font-sans antialiased">
+<body class="font-sans antialiased">
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <aside class="w-64 bg-panel border-r border-gray-800 flex flex-col">
-      <div class="p-4 border-b border-gray-800">
+    <aside class="w-64 glass border-r border-[var(--line)] flex flex-col shrink-0">
+      <div class="p-5 border-b border-[var(--line)]">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#25d366] to-[#128c4b] flex items-center justify-center text-black font-extrabold text-sm shadow-lg shadow-emerald-500/20">WA</div>
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-extrabold text-base shadow-lg"
+               style="background: linear-gradient(135deg, var(--accent), var(--accent2));">WA</div>
           <div>
             <h1 class="text-sm font-bold leading-tight">Bot Control</h1>
-            <span id="sidebarStatus" class="text-xs text-gray-400">Connecting…</span>
+            <span id="sidebarStatus" class="text-xs" style="color: var(--muted);">Connecting…</span>
           </div>
         </div>
       </div>
 
       <nav class="flex-1 overflow-y-auto p-3 space-y-1">
-        <button data-page="dashboard" class="nav-item active w-full text-left px-3 py-2 rounded-lg text-sm font-medium bg-emerald-500/10 text-emerald-400">
-          <span class="mr-2">🏠</span>Dashboard
+        <button data-page="dashboard" class="nav-item active">
+          <span class="icon-pill">🏠</span>Dashboard
         </button>
-        <button data-page="chats" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-gray-200">
-          <span class="mr-2">💬</span>Chats
+        <button data-page="chats" class="nav-item">
+          <span class="icon-pill">💬</span>Chats
         </button>
-        <button data-page="moderation" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-gray-200">
-          <span class="mr-2">🛡️</span>Moderation
+        <button data-page="moderation" class="nav-item">
+          <span class="icon-pill">🛡️</span>Moderation
         </button>
-        <button data-page="settings" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-gray-200">
-          <span class="mr-2">⚙️</span>Settings
+        <button data-page="settings" class="nav-item">
+          <span class="icon-pill">⚙️</span>Settings
         </button>
       </nav>
 
-      <div class="p-3 border-t border-gray-800">
-        <div class="flex items-center gap-2 text-xs text-gray-400">
+      <div class="p-4 border-t border-[var(--line)]">
+        <div class="flex items-center gap-2 text-xs" style="color: var(--muted);">
           <span id="liveDot" class="w-2 h-2 rounded-full bg-gray-500"></span>
           <span id="lastUpdateText">Not yet updated</span>
         </div>
@@ -79,49 +205,49 @@
 
     <!-- Main -->
     <main class="flex-1 overflow-y-auto">
-      <div class="p-6 space-y-6">
+      <div class="p-6 lg:p-8 space-y-7 max-w-6xl mx-auto">
         <!-- Dashboard -->
-        <section id="page-dashboard" class="page space-y-6">
+        <section id="page-dashboard" class="page space-y-7">
           <div>
-            <h2 class="text-xl font-bold">Dashboard</h2>
-            <p class="text-sm text-gray-400 mt-1">Live overview of your WhatsApp bot</p>
+            <h2 class="text-2xl font-extrabold grad-text">Dashboard</h2>
+            <p class="text-sm mt-1" style="color: var(--muted);">Live overview of your WhatsApp bot</p>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-surface border border-gray-800 rounded-xl p-4">
-              <div class="text-xs text-gray-400 mb-1">Uptime</div>
-              <div id="uptime" class="text-2xl font-bold">—</div>
+            <div class="card p-5">
+              <div class="text-xs mb-2" style="color: var(--muted);">Uptime</div>
+              <div id="uptime" class="stat-num">—</div>
             </div>
-            <div class="bg-surface border border-gray-800 rounded-xl p-4">
-              <div class="text-xs text-gray-400 mb-1">Messages handled</div>
-              <div id="messagesHandled" class="text-2xl font-bold">—</div>
+            <div class="card p-5">
+              <div class="text-xs mb-2" style="color: var(--muted);">Messages handled</div>
+              <div id="messagesHandled" class="stat-num">—</div>
             </div>
-            <div class="bg-surface border border-gray-800 rounded-xl p-4">
-              <div class="text-xs text-gray-400 mb-1">Commands run</div>
-              <div id="commandsHandled" class="text-2xl font-bold">—</div>
+            <div class="card p-5">
+              <div class="text-xs mb-2" style="color: var(--muted);">Commands run</div>
+              <div id="commandsHandled" class="stat-num">—</div>
             </div>
-            <div class="bg-surface border border-gray-800 rounded-xl p-4">
-              <div class="text-xs text-gray-400 mb-1">Known chats</div>
-              <div id="knownChats" class="text-2xl font-bold">—</div>
+            <div class="card p-5">
+              <div class="text-xs mb-2" style="color: var(--muted);">Known chats</div>
+              <div id="knownChats" class="stat-num">—</div>
             </div>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-surface border border-gray-800 rounded-xl p-5">
-              <h3 class="text-sm font-semibold text-gray-300 mb-4">Connection</h3>
+            <div class="card p-6">
+              <h3 class="text-sm font-semibold mb-4" style="color: #cdd7e8;">Connection</h3>
               <div class="space-y-3 text-sm">
-                <div class="flex justify-between"><span class="text-gray-400">Status</span><span id="statusPill" class="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-500/10 text-red-400">● Offline</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">Number</span><strong id="connectedNumber">—</strong></div>
-                <div class="flex justify-between"><span class="text-gray-400">Groq API</span><strong id="groqKey">—</strong></div>
-                <div class="flex justify-between"><span class="text-gray-400">AI Model</span><strong id="model">—</strong></div>
-                <div class="flex justify-between"><span class="text-gray-400">Reconnecting</span><strong id="reconnecting">—</strong></div>
-                <div class="flex justify-between"><span class="text-gray-400">Server time</span><strong id="serverTime">—</strong></div>
+                <div class="flex justify-between"><span class="label">Status</span><span id="statusPill" class="px-2 py-0.5 rounded-full text-xs font-semibold pill-off">● Offline</span></div>
+                <div class="flex justify-between"><span class="label">Number</span><strong id="connectedNumber">—</strong></div>
+                <div class="flex justify-between"><span class="label">Groq API</span><strong id="groqKey">—</strong></div>
+                <div class="flex justify-between"><span class="label">AI Model</span><strong id="model">—</strong></div>
+                <div class="flex justify-between"><span class="label">Reconnecting</span><strong id="reconnecting">—</strong></div>
+                <div class="flex justify-between"><span class="label">Server time</span><strong id="serverTime">—</strong></div>
               </div>
             </div>
 
-            <div class="bg-surface border border-gray-800 rounded-xl p-5">
-              <h3 class="text-sm font-semibold text-gray-300 mb-4">QR Code</h3>
-              <div id="qrBox" class="bg-white rounded-lg min-h-[200px] flex items-center justify-center">
+            <div class="card p-6">
+              <h3 class="text-sm font-semibold mb-4" style="color: #cdd7e8;">QR Code</h3>
+              <div id="qrBox" class="bg-white rounded-lg min-h-[200px] flex items-center justify-center overflow-hidden">
                 <p class="text-gray-500 text-sm p-4 text-center">Waiting for QR code…</p>
               </div>
             </div>
@@ -129,169 +255,169 @@
         </section>
 
         <!-- Chats -->
-        <section id="page-chats" class="page hidden space-y-6">
+        <section id="page-chats" class="page hidden space-y-7">
           <div>
-            <h2 class="text-xl font-bold">Chats</h2>
-            <p class="text-sm text-gray-400 mt-1">All known chats and their settings</p>
+            <h2 class="text-2xl font-extrabold grad-text">Chats</h2>
+            <p class="text-sm mt-1" style="color: var(--muted);">All known chats and their settings</p>
           </div>
 
-          <div class="bg-surface border border-gray-800 rounded-xl p-5">
-            <h3 class="text-sm font-semibold text-gray-300 mb-4">Known Chats</h3>
+          <div class="card p-6">
+            <h3 class="text-sm font-semibold mb-4" style="color: #cdd7e8;">Known Chats</h3>
             <div id="chatList" class="space-y-2">
-              <p class="text-sm text-gray-500">No known chats yet.</p>
+              <p class="text-sm" style="color: var(--muted);">No known chats yet.</p>
             </div>
           </div>
 
-          <div class="bg-surface border border-gray-800 rounded-xl p-5">
-            <h3 class="text-sm font-semibold text-gray-300 mb-4">Schedule Message</h3>
+          <div class="card p-6">
+            <h3 class="text-sm font-semibold mb-4" style="color: #cdd7e8;">Schedule Message</h3>
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-              <select id="scheduleChat" class="bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200"></select>
-              <input id="scheduleMinutes" type="number" min="1" placeholder="Minutes" class="bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200" />
-              <input id="scheduleText" type="text" placeholder="Message text…" class="bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200" />
-              <button id="scheduleBtn" class="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold rounded-lg px-4 py-2 text-sm">Schedule</button>
+              <select id="scheduleChat" class="field px-3 py-2 text-sm"></select>
+              <input id="scheduleMinutes" type="number" min="1" placeholder="Minutes" class="field px-3 py-2 text-sm" />
+              <input id="scheduleText" type="text" placeholder="Message text…" class="field px-3 py-2 text-sm" />
+              <button id="scheduleBtn" class="btn px-4 py-2 text-sm font-semibold">Schedule</button>
             </div>
             <div id="scheduledList" class="mt-4 space-y-2"></div>
           </div>
         </section>
 
         <!-- Moderation -->
-        <section id="page-moderation" class="page hidden space-y-6">
+        <section id="page-moderation" class="page hidden space-y-7">
           <div>
-            <h2 class="text-xl font-bold">Moderation</h2>
-            <p class="text-sm text-gray-400 mt-1">Anti-spam, word filters, anti-link, auto-reply, join/leave tracking</p>
+            <h2 class="text-2xl font-extrabold grad-text">Moderation</h2>
+            <p class="text-sm mt-1" style="color: var(--muted);">Anti-spam, word filters, anti-link, auto-reply, join/leave tracking</p>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-surface border border-gray-800 rounded-xl p-5 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-300">🎛️ Moderation Controls</h3>
-              <select id="modChatSelect" class="bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 w-full"></select>
-              <label class="flex items-center justify-between py-2 border-b border-gray-800">
-                <div><div class="text-sm font-medium">Anti-spam</div><div class="text-xs text-gray-400">Warn/kick after repeated fast messages</div></div>
-                <input type="checkbox" id="modAntiSpam" class="w-10 h-5 rounded-full bg-gray-700 appearance-none cursor-pointer relative checked:bg-emerald-500" />
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color: #cdd7e8;">🎛️ Moderation Controls</h3>
+              <select id="modChatSelect" class="field px-3 py-2 text-sm w-full"></select>
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+                <div><div class="text-sm font-medium">Anti-spam</div><div class="text-xs" style="color: var(--muted);">Warn/kick after repeated fast messages</div></div>
+                <input type="checkbox" id="modAntiSpam" class="toggle" />
               </label>
-              <label class="flex items-center justify-between py-2 border-b border-gray-800">
-                <div><div class="text-sm font-medium">Anti-link</div><div class="text-xs text-gray-400">Delete messages containing links</div></div>
-                <input type="checkbox" id="modAntiLink" class="w-10 h-5 rounded-full bg-gray-700 appearance-none cursor-pointer relative checked:bg-emerald-500" />
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+                <div><div class="text-sm font-medium">Anti-link</div><div class="text-xs" style="color: var(--muted);">Delete messages containing links</div></div>
+                <input type="checkbox" id="modAntiLink" class="toggle" />
               </label>
               <label class="flex items-center justify-between py-2">
-                <div><div class="text-sm font-medium">Auto-reply</div><div class="text-xs text-gray-400">Reply to greetings automatically</div></div>
-                <input type="checkbox" id="modAutoReply" class="w-10 h-5 rounded-full bg-gray-700 appearance-none cursor-pointer relative checked:bg-emerald-500" />
+                <div><div class="text-sm font-medium">Auto-reply</div><div class="text-xs" style="color: var(--muted);">Reply to greetings automatically</div></div>
+                <input type="checkbox" id="modAutoReply" class="toggle" />
               </label>
-              <p id="modInfo" class="text-xs text-gray-500">Select a chat to manage moderation.</p>
+              <p id="modInfo" class="text-xs" style="color: var(--muted);">Select a chat to manage moderation.</p>
             </div>
 
-            <div class="bg-surface border border-gray-800 rounded-xl p-5 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-300">🚷 Word Filters</h3>
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color: #cdd7e8;">🚷 Word Filters</h3>
               <div class="flex gap-2">
-                <input id="modWordInput" type="text" placeholder="Word to block" class="flex-1 bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200" />
-                <button id="modWordAdd" class="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold rounded-lg px-4 py-2 text-sm">Add</button>
-                <button id="modWordRefresh" class="bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg px-4 py-2 text-sm">Refresh</button>
+                <input id="modWordInput" type="text" placeholder="Word to block" class="field flex-1 px-3 py-2 text-sm" />
+                <button id="modWordAdd" class="btn px-4 py-2 text-sm font-semibold">Add</button>
+                <button id="modWordRefresh" class="btn-ghost px-4 py-2 text-sm">Refresh</button>
               </div>
               <div id="modWordList" class="space-y-2"></div>
             </div>
           </div>
 
-          <div class="bg-surface border border-gray-800 rounded-xl p-5">
-            <h3 class="text-sm font-semibold text-gray-300 mb-2">📋 Join / Leave Log</h3>
-            <p class="text-xs text-gray-400 mb-3">Set a dedicated WhatsApp chat to receive join and leave events.</p>
+          <div class="card p-6">
+            <h3 class="text-sm font-semibold mb-2" style="color: #cdd7e8;">📋 Join / Leave Log</h3>
+            <p class="text-xs mb-3" style="color: var(--muted);">Set a dedicated WhatsApp chat to receive join and leave events.</p>
             <div class="flex gap-2">
-              <input id="logChatInput" type="text" placeholder="Chat ID" class="flex-1 bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200" />
-              <button id="saveLogChat" class="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold rounded-lg px-4 py-2 text-sm">Save</button>
-              <button id="clearLogChat" class="bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg px-4 py-2 text-sm">Clear</button>
+              <input id="logChatInput" type="text" placeholder="Chat ID" class="field flex-1 px-3 py-2 text-sm" />
+              <button id="saveLogChat" class="btn px-4 py-2 text-sm font-semibold">Save</button>
+              <button id="clearLogChat" class="btn-ghost px-4 py-2 text-sm">Clear</button>
             </div>
-            <p id="logChatInfo" class="text-xs text-gray-500 mt-2">No log chat configured.</p>
+            <p id="logChatInfo" class="text-xs mt-2" style="color: var(--muted);">No log chat configured.</p>
           </div>
         </section>
 
         <!-- Settings -->
-        <section id="page-settings" class="page hidden space-y-6">
+        <section id="page-settings" class="page hidden space-y-7">
           <div>
-            <h2 class="text-xl font-bold">Settings</h2>
-            <p class="text-sm text-gray-400 mt-1">Global bot configuration and system controls</p>
+            <h2 class="text-2xl font-extrabold grad-text">Settings</h2>
+            <p class="text-sm mt-1" style="color: var(--muted);">Global bot configuration and system controls</p>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-surface border border-gray-800 rounded-xl p-5 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-300">Bot Behaviour</h3>
-              <label class="flex items-center justify-between py-2 border-b border-gray-800">
-                <div><div class="text-sm font-medium">Global AI</div><div class="text-xs text-gray-400">AI replies in all chats by default</div></div>
-                <input type="checkbox" id="globalAiToggle" class="w-10 h-5 rounded-full bg-gray-700 appearance-none cursor-pointer relative checked:bg-emerald-500" />
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color: #cdd7e8;">Bot Behaviour</h3>
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+                <div><div class="text-sm font-medium">Global AI</div><div class="text-xs" style="color: var(--muted);">AI replies in all chats by default</div></div>
+                <input type="checkbox" id="globalAiToggle" class="toggle" />
               </label>
-              <label class="flex items-center justify-between py-2 border-b border-gray-800">
-                <div><div class="text-sm font-medium">Private mode</div><div class="text-xs text-gray-400">Only the owner can use commands</div></div>
-                <input type="checkbox" id="privateToggle" class="w-10 h-5 rounded-full bg-gray-700 appearance-none cursor-pointer relative checked:bg-emerald-500" />
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+                <div><div class="text-sm font-medium">Private mode</div><div class="text-xs" style="color: var(--muted);">Only the owner can use commands</div></div>
+                <input type="checkbox" id="privateToggle" class="toggle" />
               </label>
-              <label class="flex items-center justify-between py-2 border-b border-gray-800">
-                <div><div class="text-sm font-medium">Auto-view status</div><div class="text-xs text-gray-400">Automatically view incoming statuses</div></div>
-                <input type="checkbox" id="autoViewStatusToggle" class="w-10 h-5 rounded-full bg-gray-700 appearance-none cursor-pointer relative checked:bg-emerald-500" />
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+                <div><div class="text-sm font-medium">Auto-view status</div><div class="text-xs" style="color: var(--muted);">Automatically view incoming statuses</div></div>
+                <input type="checkbox" id="autoViewStatusToggle" class="toggle" />
               </label>
               <label class="flex items-center justify-between py-2">
-                <div><div class="text-sm font-medium">Auto-bypass view-once</div><div class="text-xs text-gray-400">Forward view-once media to owner</div></div>
-                <input type="checkbox" id="autoBypassViewOnceToggle" class="w-10 h-5 rounded-full bg-gray-700 appearance-none cursor-pointer relative checked:bg-emerald-500" />
+                <div><div class="text-sm font-medium">Auto-bypass view-once</div><div class="text-xs" style="color: var(--muted);">Forward view-once media to owner</div></div>
+                <input type="checkbox" id="autoBypassViewOnceToggle" class="toggle" />
               </label>
             </div>
 
-            <div class="bg-surface border border-gray-800 rounded-xl p-5 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-300">Theme</h3>
-              <label class="flex items-center justify-between py-2 border-b border-gray-800">
-                <div><div class="text-sm font-medium">Dark mode</div><div class="text-xs text-gray-400">Use dark color scheme</div></div>
-                <input type="checkbox" id="darkModeToggle" class="w-10 h-5 rounded-full bg-gray-700 appearance-none cursor-pointer relative checked:bg-emerald-500" />
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color: #cdd7e8;">Theme</h3>
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+                <div><div class="text-sm font-medium">Dark mode</div><div class="text-xs" style="color: var(--muted);">Use dark color scheme</div></div>
+                <input type="checkbox" id="darkModeToggle" class="toggle" />
               </label>
               <div>
-                <label class="text-sm font-medium text-gray-300 block mb-2">Accent color</label>
-                <select id="accentColor" class="bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 w-full">
-                  <option value="#25d366">Green</option>
-                  <option value="#3b82f6">Blue</option>
+                <label class="text-sm font-medium block mb-2" style="color: #cdd7e8;">Accent color</label>
+                <select id="accentColor" class="field px-3 py-2 text-sm w-full">
+                  <option value="#10b981">Emerald</option>
+                  <option value="#6366f1">Indigo</option>
                   <option value="#8b5cf6">Purple</option>
-                  <option value="#f97316">Orange</option>
-                  <option value="#ec4899">Pink</option>
+                  <option value="#f59e0b">Amber</option>
                   <option value="#ef4444">Red</option>
+                  <option value="#3b82f6">Blue</option>
                 </select>
               </div>
             </div>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-surface border border-gray-800 rounded-xl p-5 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-300">Default AI Prompt</h3>
-              <select id="aiPersonality" class="bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 w-full"></select>
-              <textarea id="aiPrompt" rows="5" placeholder="How the bot should behave…" class="w-full bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200"></textarea>
-              <button id="savePrompt" class="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold rounded-lg px-4 py-2 text-sm w-full">Save prompt</button>
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color: #cdd7e8;">Default AI Prompt</h3>
+              <select id="aiPersonality" class="field px-3 py-2 text-sm w-full"></select>
+              <textarea id="aiPrompt" rows="5" placeholder="How the bot should behave…" class="field w-full px-3 py-2 text-sm"></textarea>
+              <button id="savePrompt" class="btn px-4 py-2 text-sm font-semibold w-full">Save prompt</button>
             </div>
 
-            <div class="bg-surface border border-gray-800 rounded-xl p-5 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-300">🎖️ Auto-Promote</h3>
-              <p class="text-xs text-gray-400">Users who hit message milestones in a group get auto-promoted to admin.</p>
-              <input id="autoPromoThresholds" type="text" placeholder="e.g. 100, 500, 1000" class="w-full bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200" />
-              <button id="saveAutoPromo" class="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold rounded-lg px-4 py-2 text-sm w-full">Save thresholds</button>
-              <p id="autoPromoInfo" class="text-xs text-gray-500"></p>
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color: #cdd7e8;">🎖️ Auto-Promote</h3>
+              <p class="text-xs" style="color: var(--muted);">Users who hit message milestones in a group get auto-promoted to admin.</p>
+              <input id="autoPromoThresholds" type="text" placeholder="e.g. 100, 500, 1000" class="field w-full px-3 py-2 text-sm" />
+              <button id="saveAutoPromo" class="btn px-4 py-2 text-sm font-semibold w-full">Save thresholds</button>
+              <p id="autoPromoInfo" class="text-xs" style="color: var(--muted);"></p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-surface border border-gray-800 rounded-xl p-5 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-300">📢 Broadcast</h3>
-              <textarea id="broadcastText" rows="4" placeholder="Broadcast text…" class="w-full bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200"></textarea>
-              <button id="sendBroadcast" class="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold rounded-lg px-4 py-2 text-sm w-full">Send broadcast</button>
-              <p id="broadcastInfo" class="text-xs text-gray-500"></p>
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color: #cdd7e8;">📢 Broadcast</h3>
+              <textarea id="broadcastText" rows="4" placeholder="Broadcast text…" class="field w-full px-3 py-2 text-sm"></textarea>
+              <button id="sendBroadcast" class="btn px-4 py-2 text-sm font-semibold w-full">Send broadcast</button>
+              <p id="broadcastInfo" class="text-xs" style="color: var(--muted);"></p>
             </div>
 
-            <div class="bg-surface border border-gray-800 rounded-xl p-5 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-300">⚡ Keyword Auto-Replies</h3>
-              <p class="text-xs text-gray-400">Create keyword-triggered replies that bypass the AI.</p>
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color: #cdd7e8;">⚡ Keyword Auto-Replies</h3>
+              <p class="text-xs" style="color: var(--muted);">Create keyword-triggered replies that bypass the AI.</p>
               <div class="flex gap-2">
-                <input id="triggerKeyword" type="text" placeholder="Keyword" class="flex-1 bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200" />
-                <input id="triggerReply" type="text" placeholder="Reply" class="flex-1 bg-[#0c1520] border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200" />
-                <button id="addTrigger" class="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold rounded-lg px-4 py-2 text-sm">Add</button>
+                <input id="triggerKeyword" type="text" placeholder="Keyword" class="field flex-1 px-3 py-2 text-sm" />
+                <input id="triggerReply" type="text" placeholder="Reply" class="field flex-1 px-3 py-2 text-sm" />
+                <button id="addTrigger" class="btn px-4 py-2 text-sm font-semibold">Add</button>
               </div>
               <div id="triggerList" class="space-y-2"></div>
             </div>
           </div>
 
-          <div class="bg-surface border border-gray-800 rounded-xl p-5">
-            <h3 class="text-sm font-semibold text-gray-300 mb-3">⚠️ System</h3>
+          <div class="card p-6">
+            <h3 class="text-sm font-semibold mb-3" style="color: #cdd7e8;">⚠️ System</h3>
             <button id="restartBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg px-4 py-2 text-sm">🔄 Restart bot</button>
-            <p class="text-xs text-gray-500 mt-2">Restart reconnects using the saved session — no QR re-scan needed.</p>
+            <p class="text-xs mt-2" style="color: var(--muted);">Restart reconnects using the saved session — no QR re-scan needed.</p>
           </div>
         </section>
       </div>
@@ -352,16 +478,12 @@
     function switchPage(page) {
       document.querySelectorAll('.page').forEach((p) => p.classList.add('hidden'));
       document.querySelectorAll('.nav-item').forEach((btn) => {
-        btn.classList.remove('active', 'bg-emerald-500/10', 'text-emerald-400');
-        btn.classList.add('text-gray-400', 'hover:bg-gray-800', 'hover:text-gray-200');
+        btn.classList.remove('active');
       });
       const target = el('page-' + page);
       if (target) target.classList.remove('hidden');
       const nav = document.querySelector(`.nav-item[data-page="${page}"]`);
-      if (nav) {
-        nav.classList.add('active', 'bg-emerald-500/10', 'text-emerald-400');
-        nav.classList.remove('text-gray-400', 'hover:bg-gray-800', 'hover:text-gray-200');
-      }
+      if (nav) nav.classList.add('active');
     }
 
     document.querySelectorAll('.nav-item').forEach((btn) => {
@@ -373,10 +495,10 @@
       if (pill) {
         if (d.online) {
           pill.textContent = '● Online';
-          pill.className = 'px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400';
+          pill.className = 'px-2 py-0.5 rounded-full text-xs font-semibold pill-on';
         } else {
           pill.textContent = '● Offline';
-          pill.className = 'px-2 py-0.5 rounded-full text-xs font-semibold bg-red-500/10 text-red-400';
+          pill.className = 'px-2 py-0.5 rounded-full text-xs font-semibold pill-off';
         }
       }
 
@@ -394,7 +516,8 @@
       if (sidebarStatus) sidebarStatus.textContent = d.connectedNumber || (d.online ? 'Connected' : 'Offline');
 
       const liveDot = el('liveDot');
-      if (liveDot) liveDot.className = d.online ? 'w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(37,211,102,0.6)]' : 'w-2 h-2 rounded-full bg-gray-500';
+      if (liveDot) liveDot.className = d.online ? 'w-2 h-2 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'w-2 h-2 rounded-full';
+      if (liveDot) liveDot.style.background = d.online ? 'var(--accent)' : '#6b7280';
 
       const qrBox = el('qrBox');
       if (!qrBox) return;
@@ -445,7 +568,7 @@
       if (d.theme && darkModeToggle) {
         darkModeToggle.checked = d.theme.mode !== 'light';
         const accent = el('accentColor');
-        if (accent) accent.value = d.theme.accent || '#25d366';
+        if (accent) accent.value = d.theme.accent || '#10b981';
         applyTheme(d.theme.mode, d.theme.accent);
       }
 
@@ -491,7 +614,7 @@
       const list = d.knownChatsList || [];
       if (!wrap) return;
       if (!list.length) {
-        wrap.innerHTML = '<p class="text-sm text-gray-500">No known chats yet.</p>';
+        wrap.innerHTML = '<p class="text-sm" style="color: var(--muted);">No known chats yet.</p>';
         return;
       }
       const key = list.map((c) => c.chatId + (c.muted ? 'M' : '') + (c.aiEnabled ? 'A' : '') + (c.antiLink ? 'L' : '') + (c.antiSpam ? 'S' : '')).join('|');
@@ -500,20 +623,20 @@
 
       wrap.innerHTML = list.map((c) => {
         const tags = [
-          c.aiEnabled ? '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">AI</span>' : '<span class="text-xs px-2 py-0.5 rounded-full bg-gray-700 text-gray-300">AI off</span>',
-          c.autoReply ? '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">Auto</span>' : '',
-          c.antiLink ? '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">AntiLink</span>' : '',
-          c.antiSpam ? '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">AntiSpam</span>' : '',
-          c.muted ? '<span class="text-xs px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400">Muted</span>' : ''
+          c.aiEnabled ? '<span class="text-xs px-2 py-0.5 rounded-full pill-on">AI</span>' : '<span class="text-xs px-2 py-0.5 rounded-full" style="background: var(--line); color: var(--muted);">AI off</span>',
+          c.autoReply ? '<span class="text-xs px-2 py-0.5 rounded-full pill-on">Auto</span>' : '',
+          c.antiLink ? '<span class="text-xs px-2 py-0.5 rounded-full pill-on">AntiLink</span>' : '',
+          c.antiSpam ? '<span class="text-xs px-2 py-0.5 rounded-full pill-on">AntiSpam</span>' : '',
+          c.muted ? '<span class="text-xs px-2 py-0.5 rounded-full" style="background: rgba(245,158,11,.12); color: #fbbf24;">Muted</span>' : ''
         ].filter(Boolean).join('');
-        return `<div class="flex items-center gap-3 p-3 bg-[#141d2a] border border-gray-800 rounded-lg">
-          <img class="chat-avatar w-9 h-9 rounded-full object-cover flex-shrink-0 bg-[#1a2333]" data-jid="${esc(c.chatId)}" alt="" />
+        return `<div class="flex items-center gap-3 p-3 card">
+          <img class="chat-avatar w-9 h-9 rounded-full object-cover flex-shrink-0" data-jid="${esc(c.chatId)}" alt="" />
           <div class="flex-1 min-w-0">
             <div class="text-sm text-gray-200 font-medium truncate">${esc(c.displayName || c.chatId)}</div>
-            <div class="text-xs text-gray-500 truncate">${esc(c.chatId)}</div>
+            <div class="text-xs truncate" style="color: var(--muted);">${esc(c.chatId)}</div>
           </div>
           <div class="flex gap-1 flex-wrap">${tags}</div>
-          <button class="text-xs px-3 py-1.5 rounded-lg border border-gray-700 bg-[#0f1621] text-gray-300 hover:border-emerald-500 hover:text-emerald-400 transition-colors" data-chat="${esc(c.chatId)}" data-action="${c.muted ? 'unmute' : 'mute'}">
+          <button class="mini-btn text-xs px-3 py-1.5 rounded-lg" data-chat="${esc(c.chatId)}" data-action="${c.muted ? 'unmute' : 'mute'}">
             ${c.muted ? 'Unmute' : 'Mute'}
           </button>
         </div>`;
@@ -543,15 +666,15 @@
       const wrap = el('scheduledList');
       if (!wrap) return;
       if (!list.length) {
-        wrap.innerHTML = '<p class="text-sm text-gray-500">No scheduled messages.</p>';
+        wrap.innerHTML = '<p class="text-sm" style="color: var(--muted);">No scheduled messages.</p>';
         return;
       }
-      wrap.innerHTML = list.map((m) => `<div class="flex items-center gap-3 p-3 bg-[#141d2a] border border-gray-800 rounded-lg">
+      wrap.innerHTML = list.map((m) => `<div class="flex items-center gap-3 p-3 card">
         <div class="flex-1 min-w-0">
           <div class="text-sm text-gray-200 truncate">${esc(m.text)}</div>
-          <div class="text-xs text-gray-500">${esc(m.chatId)} · in ${Math.max(0, Math.round((m.sendAt - Date.now()) / 60000))}m</div>
+          <div class="text-xs" style="color: var(--muted);">${esc(m.chatId)} · in ${Math.max(0, Math.round((m.sendAt - Date.now()) / 60000))}m</div>
         </div>
-        <button class="mini-btn text-xs px-3 py-1.5 rounded-lg border border-gray-700 bg-[#0f1621] text-gray-300 hover:border-emerald-500 hover:text-emerald-400" data-sched-id="${m.id}">Clear</button>
+        <button class="mini-btn text-xs px-3 py-1.5 rounded-lg" data-sched-id="${m.id}">Clear</button>
       </div>`).join('');
       const sel = el('scheduleChat');
       if (!sel) return;
@@ -566,15 +689,15 @@
       const wrap = el('triggerList');
       if (!wrap) return;
       if (!list.length) {
-        wrap.innerHTML = '<p class="text-sm text-gray-500">No keyword triggers configured.</p>';
+        wrap.innerHTML = '<p class="text-sm" style="color: var(--muted);">No keyword triggers configured.</p>';
         return;
       }
-      wrap.innerHTML = list.map((t) => `<div class="flex items-center gap-3 p-3 bg-[#141d2a] border border-gray-800 rounded-lg">
+      wrap.innerHTML = list.map((t) => `<div class="flex items-center gap-3 p-3 card">
         <div class="flex-1 min-w-0">
           <div class="text-sm text-gray-200"><strong>${esc(t.keyword)}</strong></div>
-          <div class="text-xs text-gray-500">${esc(t.reply)}</div>
+          <div class="text-xs" style="color: var(--muted);">${esc(t.reply)}</div>
         </div>
-        <button class="mini-btn text-xs px-3 py-1.5 rounded-lg border border-gray-700 bg-[#0f1621] text-gray-300 hover:border-red-500 hover:text-red-400" data-trigger-id="${t.id}">Delete</button>
+        <button class="mini-btn text-xs px-3 py-1.5 rounded-lg" data-trigger-id="${t.id}">Delete</button>
       </div>`).join('');
     }
 
@@ -600,11 +723,12 @@
         renderAll(statusCache);
         const liveDot = el('liveDot');
         if (liveDot && statusCache.online) {
-          liveDot.className = 'w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(37,211,102,0.6)]';
+          liveDot.className = 'w-2 h-2 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.6)]';
+          liveDot.style.background = 'var(--accent)';
         }
       } catch (e) {
         const liveDot = el('liveDot');
-        if (liveDot) liveDot.className = 'w-2 h-2 rounded-full bg-gray-500';
+        if (liveDot) { liveDot.className = 'w-2 h-2 rounded-full'; liveDot.style.background = '#6b7280'; }
       }
     }
 
@@ -624,6 +748,7 @@
 
     function applyTheme(mode, accent) {
       document.documentElement.setAttribute('data-theme', mode);
+      document.documentElement.classList.toggle('dark', mode !== 'light');
       if (accent) {
         document.documentElement.style.setProperty('--accent', accent);
         document.documentElement.style.setProperty('--accent-dim', accent + '22');
@@ -771,12 +896,12 @@
         const data = await api('/api/moderation/wordfilter', { chatId });
         const filters = data.filters || [];
         if (!filters.length) {
-          modWordList.innerHTML = '<p class="text-sm text-gray-500">No blocked words.</p>';
+          modWordList.innerHTML = '<p class="text-sm" style="color: var(--muted);">No blocked words.</p>';
           return;
         }
-        modWordList.innerHTML = filters.map((word) => `<div class="flex items-center gap-3 p-3 bg-[#141d2a] border border-gray-800 rounded-lg">
+        modWordList.innerHTML = filters.map((word) => `<div class="flex items-center gap-3 p-3 card">
           <div class="flex-1 text-sm text-gray-200">${esc(word)}</div>
-          <button class="mini-btn text-xs px-3 py-1.5 rounded-lg border border-gray-700 bg-[#0f1621] text-gray-300 hover:border-red-500 hover:text-red-400" data-mod-word="${esc(word)}">Remove</button>
+          <button class="mini-btn text-xs px-3 py-1.5 rounded-lg" data-mod-word="${esc(word)}">Remove</button>
         </div>`).join('');
       } catch (e) {
         modWordList.innerHTML = '';
@@ -896,7 +1021,7 @@
       };
       eventSource.onerror = () => {
         const liveDot = el('liveDot');
-        if (liveDot) liveDot.className = 'w-2 h-2 rounded-full bg-gray-500';
+        if (liveDot) { liveDot.className = 'w-2 h-2 rounded-full'; liveDot.style.background = '#6b7280'; }
       };
     }
   </script>
