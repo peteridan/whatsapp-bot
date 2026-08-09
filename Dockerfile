@@ -20,6 +20,7 @@ COPY package.json package-lock.json* ./
 RUN npm install --omit=dev && npm cache clean --force
 
 COPY bot-core.js ./
+COPY lib ./lib
 COPY public ./public
 
 EXPOSE ${PORT}
