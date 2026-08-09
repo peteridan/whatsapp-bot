@@ -1,5 +1,13 @@
 require('dotenv').config();
 
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught exception (keeping process alive):', err);
+});
+
+process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled promise rejection (keeping process alive):', reason);
+});
+
 const config = require('./lib/config');
 const state = require('./lib/state');
 const storeModule = require('./lib/store');
