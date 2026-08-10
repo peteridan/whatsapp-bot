@@ -165,10 +165,21 @@
     ::-webkit-scrollbar-track { background: transparent; }
   </style>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased overflow-x-hidden">
+  <div id="sidebarBackdrop" class="fixed inset-0 bg-black/60 z-30 hidden lg:hidden"></div>
+  <header class="lg:hidden flex items-center justify-between px-4 py-3 border-b border-[var(--line)] bg-[var(--panel)]/90 backdrop-blur sticky top-0 z-20">
+    <button id="menuBtn" class="p-2 -ml-2 rounded-lg hover:bg-white/5" aria-label="Menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-extrabold text-xs" style="background: linear-gradient(135deg, var(--accent), var(--accent2));">WA</div>
+      <span class="font-bold text-sm">Bot Control</span>
+    </div>
+    <span class="w-2 h-2 rounded-full bg-gray-500 lg:hidden"></span>
+  </header>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <aside class="w-64 glass border-r border-[var(--line)] flex flex-col shrink-0">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transition-transform duration-200 lg:relative lg:translate-x-0 glass border-r border-[var(--line)] flex flex-col shrink-0">
       <div class="p-5 border-b border-[var(--line)]">
         <div class="flex items-center gap-3">
           <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-extrabold text-base shadow-lg"
@@ -204,7 +215,7 @@
     </aside>
 
     <!-- Main -->
-    <main class="flex-1 overflow-y-auto">
+    <main class="flex-1 overflow-y-auto pt-14 lg:pt-0">
       <div class="p-6 lg:p-8 space-y-7 max-w-6xl mx-auto">
         <!-- Dashboard -->
         <section id="page-dashboard" class="page space-y-7">
@@ -1034,6 +1045,17 @@
         const liveDot = el('liveDot');
         if (liveDot) { liveDot.className = 'w-2 h-2 rounded-full'; liveDot.style.background = '#6b7280'; }
       };
+    }
+
+    const menuBtn = el('menuBtn');
+    const sidebar = el('sidebar');
+    const backdrop = el('sidebarBackdrop');
+    const openSidebar = () => { sidebar.classList.remove('-translate-x-full'); backdrop.classList.remove('hidden'); };
+    const closeSidebar = () => { sidebar.classList.add('-translate-x-full'); backdrop.classList.add('hidden'); };
+    if (menuBtn && sidebar && backdrop) {
+      menuBtn.addEventListener('click', () => { sidebar.classList.contains('-translate-x-full') ? openSidebar() : closeSidebar(); });
+      backdrop.addEventListener('click', closeSidebar);
+      sidebar.querySelectorAll('.nav-item').forEach((btn) => btn.addEventListener('click', closeSidebar));
     }
   </script>
 </body>
