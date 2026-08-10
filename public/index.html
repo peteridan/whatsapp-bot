@@ -157,7 +157,7 @@
     .toggle:checked::after { transform: translateX(1.25rem); background: #fff; }
     .pill-off { background: rgba(255,77,77,.12); color: #ff8080; }
     .pill-on { background: var(--accent-dim); color: var(--accent); }
-    .stat-num { font-size: 1.65rem; font-weight: 800; letter-spacing: -.02em; }
+    .stat-num { font-size: 1.4rem; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.2; word-break: break-word; }
     .label { color: var(--muted); }
     .chat-avatar { background: var(--line); }
     ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -469,6 +469,17 @@
       return p.join(' ');
     }
 
+    function fmtUptimeShort(s) {
+      const d = Math.floor(s / 86400);
+      const h = Math.floor((s % 86400) / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = Math.floor(s % 60);
+      if (d) return h ? `${d}d ${h}h` : `${d}d`;
+      if (h) return m ? `${h}h ${m}m` : `${h}h`;
+      if (m) return `${m}m ${sec}s`;
+      return `${sec}s`;
+    }
+
     function esc(s) {
       return String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -548,7 +559,7 @@
       const messagesHandled = el('messagesHandled');
       const commandsHandled = el('commandsHandled');
       const knownChats = el('knownChats');
-      if (uptime) uptime.textContent = fmtUptime(d.uptimeSeconds || 0);
+      if (uptime) uptime.textContent = fmtUptimeShort(d.uptimeSeconds || 0);
       if (messagesHandled) messagesHandled.textContent = d.messagesHandled ?? 0;
       if (commandsHandled) commandsHandled.textContent = d.commandsHandled ?? 0;
       if (knownChats) knownChats.textContent = d.knownChats ?? 0;
