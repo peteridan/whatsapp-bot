@@ -282,10 +282,10 @@
           <div class="card p-6">
             <h3 class="text-sm font-semibold mb-4" style="color: #cdd7e8;">Schedule Message</h3>
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-              <select id="scheduleChat" class="field px-3 py-2 text-sm"></select>
-              <input id="scheduleMinutes" type="number" min="1" placeholder="Minutes" class="field px-3 py-2 text-sm" />
-              <input id="scheduleText" type="text" placeholder="Message text…" class="field px-3 py-2 text-sm" />
-              <button id="scheduleBtn" class="btn px-4 py-2 text-sm font-semibold">Schedule</button>
+              <select id="scheduleChat" class="field px-3 py-2 text-sm w-full"></select>
+              <input id="scheduleMinutes" type="number" min="1" placeholder="Minutes" class="field px-3 py-2 text-sm w-full" />
+              <input id="scheduleText" type="text" placeholder="Message text…" class="field px-3 py-2 text-sm w-full" />
+              <button id="scheduleBtn" class="btn px-4 py-2 text-sm font-semibold w-full sm:w-auto">Schedule</button>
             </div>
             <div id="scheduledList" class="mt-4 space-y-2"></div>
           </div>
@@ -319,10 +319,10 @@
 
             <div class="card p-6 space-y-4">
               <h3 class="text-sm font-semibold" style="color: #cdd7e8;">🚷 Word Filters</h3>
-              <div class="flex gap-2">
-                <input id="modWordInput" type="text" placeholder="Word to block" class="field flex-1 px-3 py-2 text-sm" />
-                <button id="modWordAdd" class="btn px-4 py-2 text-sm font-semibold">Add</button>
-                <button id="modWordRefresh" class="btn-ghost px-4 py-2 text-sm">Refresh</button>
+              <div class="flex flex-wrap gap-2">
+                <input id="modWordInput" type="text" placeholder="Word to block" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
+                <button id="modWordAdd" class="btn px-4 py-2 text-sm font-semibold whitespace-nowrap">Add</button>
+                <button id="modWordRefresh" class="btn-ghost px-4 py-2 text-sm whitespace-nowrap">Refresh</button>
               </div>
               <div id="modWordList" class="space-y-2"></div>
             </div>
@@ -331,10 +331,10 @@
           <div class="card p-6">
             <h3 class="text-sm font-semibold mb-2" style="color: #cdd7e8;">📋 Join / Leave Log</h3>
             <p class="text-xs mb-3" style="color: var(--muted);">Set a dedicated WhatsApp chat to receive join and leave events.</p>
-            <div class="flex gap-2">
-              <input id="logChatInput" type="text" placeholder="Chat ID" class="field flex-1 px-3 py-2 text-sm" />
-              <button id="saveLogChat" class="btn px-4 py-2 text-sm font-semibold">Save</button>
-              <button id="clearLogChat" class="btn-ghost px-4 py-2 text-sm">Clear</button>
+            <div class="flex flex-wrap gap-2">
+              <input id="logChatInput" type="text" placeholder="Chat ID" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
+              <button id="saveLogChat" class="btn px-4 py-2 text-sm font-semibold whitespace-nowrap">Save</button>
+              <button id="clearLogChat" class="btn-ghost px-4 py-2 text-sm whitespace-nowrap">Clear</button>
             </div>
             <p id="logChatInfo" class="text-xs mt-2" style="color: var(--muted);">No log chat configured.</p>
           </div>
@@ -416,10 +416,10 @@
             <div class="card p-6 space-y-4">
               <h3 class="text-sm font-semibold" style="color: #cdd7e8;">⚡ Keyword Auto-Replies</h3>
               <p class="text-xs" style="color: var(--muted);">Create keyword-triggered replies that bypass the AI.</p>
-              <div class="flex gap-2">
-                <input id="triggerKeyword" type="text" placeholder="Keyword" class="field flex-1 px-3 py-2 text-sm" />
-                <input id="triggerReply" type="text" placeholder="Reply" class="field flex-1 px-3 py-2 text-sm" />
-                <button id="addTrigger" class="btn px-4 py-2 text-sm font-semibold">Add</button>
+              <div class="flex flex-wrap gap-2">
+                <input id="triggerKeyword" type="text" placeholder="Keyword" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
+                <input id="triggerReply" type="text" placeholder="Reply" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
+                <button id="addTrigger" class="btn px-4 py-2 text-sm font-semibold whitespace-nowrap">Add</button>
               </div>
               <div id="triggerList" class="space-y-2"></div>
             </div>
@@ -651,14 +651,14 @@
           c.antiSpam ? '<span class="text-xs px-2 py-0.5 rounded-full pill-on">AntiSpam</span>' : '',
           c.muted ? '<span class="text-xs px-2 py-0.5 rounded-full" style="background: rgba(245,158,11,.12); color: #fbbf24;">Muted</span>' : ''
         ].filter(Boolean).join('');
-        return `<div class="flex items-center gap-3 p-3 card">
+        return `<div class="flex flex-wrap items-center gap-3 p-3 card">
           <img class="chat-avatar w-9 h-9 rounded-full object-cover flex-shrink-0" data-jid="${esc(c.chatId)}" alt="" />
           <div class="flex-1 min-w-0">
             <div class="text-sm text-gray-200 font-medium truncate">${esc(c.displayName || c.chatId)}</div>
             <div class="text-xs truncate" style="color: var(--muted);">${esc(c.chatId)}</div>
           </div>
           <div class="flex gap-1 flex-wrap">${tags}</div>
-          <button class="mini-btn text-xs px-3 py-1.5 rounded-lg" data-chat="${esc(c.chatId)}" data-action="${c.muted ? 'unmute' : 'mute'}">
+          <button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-chat="${esc(c.chatId)}" data-action="${c.muted ? 'unmute' : 'mute'}">
             ${c.muted ? 'Unmute' : 'Mute'}
           </button>
         </div>`;
@@ -691,12 +691,12 @@
         wrap.innerHTML = '<p class="text-sm" style="color: var(--muted);">No scheduled messages.</p>';
         return;
       }
-      wrap.innerHTML = list.map((m) => `<div class="flex items-center gap-3 p-3 card">
+      wrap.innerHTML = list.map((m) => `<div class="flex flex-wrap items-center gap-3 p-3 card">
         <div class="flex-1 min-w-0">
           <div class="text-sm text-gray-200 truncate">${esc(m.text)}</div>
           <div class="text-xs" style="color: var(--muted);">${esc(m.chatId)} · in ${Math.max(0, Math.round((m.sendAt - Date.now()) / 60000))}m</div>
         </div>
-        <button class="mini-btn text-xs px-3 py-1.5 rounded-lg" data-sched-id="${m.id}">Clear</button>
+        <button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-sched-id="${m.id}">Clear</button>
       </div>`).join('');
       const sel = el('scheduleChat');
       if (!sel) return;
@@ -714,12 +714,12 @@
         wrap.innerHTML = '<p class="text-sm" style="color: var(--muted);">No keyword triggers configured.</p>';
         return;
       }
-      wrap.innerHTML = list.map((t) => `<div class="flex items-center gap-3 p-3 card">
+      wrap.innerHTML = list.map((t) => `<div class="flex flex-wrap items-center gap-3 p-3 card">
         <div class="flex-1 min-w-0">
           <div class="text-sm text-gray-200"><strong>${esc(t.keyword)}</strong></div>
           <div class="text-xs" style="color: var(--muted);">${esc(t.reply)}</div>
         </div>
-        <button class="mini-btn text-xs px-3 py-1.5 rounded-lg" data-trigger-id="${t.id}">Delete</button>
+        <button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-trigger-id="${t.id}">Delete</button>
       </div>`).join('');
     }
 
@@ -921,9 +921,9 @@
           modWordList.innerHTML = '<p class="text-sm" style="color: var(--muted);">No blocked words.</p>';
           return;
         }
-        modWordList.innerHTML = filters.map((word) => `<div class="flex items-center gap-3 p-3 card">
-          <div class="flex-1 text-sm text-gray-200">${esc(word)}</div>
-          <button class="mini-btn text-xs px-3 py-1.5 rounded-lg" data-mod-word="${esc(word)}">Remove</button>
+        modWordList.innerHTML = filters.map((word) => `<div class="flex flex-wrap items-center gap-3 p-3 card">
+          <div class="flex-1 min-w-0 text-sm text-gray-200">${esc(word)}</div>
+          <button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-mod-word="${esc(word)}">Remove</button>
         </div>`).join('');
       } catch (e) {
         modWordList.innerHTML = '';
