@@ -253,6 +253,7 @@
                 <div class="flex justify-between"><span class="label">AI Model</span><strong id="model">—</strong></div>
                 <div class="flex justify-between"><span class="label">Reconnecting</span><strong id="reconnecting">—</strong></div>
                 <div class="flex justify-between"><span class="label">Server time</span><strong id="serverTime">—</strong></div>
+                <div class="flex justify-between"><span class="label">Presence</span><strong id="presenceInfo">—</strong></div>
               </div>
             </div>
 
@@ -534,6 +535,8 @@
       if (reconnecting) reconnecting.textContent = d.reconnecting ? 'yes' : 'no';
       const serverTime = el('serverTime');
       if (serverTime) serverTime.textContent = d.serverTime ? new Date(d.serverTime).toLocaleString() : '—';
+      const presenceInfo = el('presenceInfo');
+      if (presenceInfo) presenceInfo.textContent = d.online ? `${d.presenceOnline || 0}/${d.presenceTotal || 0} online` : '—';
       const sidebarStatus = el('sidebarStatus');
       if (sidebarStatus) sidebarStatus.textContent = d.connectedNumber || (d.online ? 'Connected' : 'Offline');
 
