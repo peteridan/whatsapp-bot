@@ -231,6 +231,12 @@
         <button data-page="chats" class="nav-item"><span class="icon-pill">💬</span>Chats</button>
         <button data-page="moderation" class="nav-item"><span class="icon-pill">🛡️</span>Moderation</button>
         <button data-page="settings" class="nav-item"><span class="icon-pill">⚙️</span>Settings</button>
+        <button data-page="livechat" class="nav-item"><span class="icon-pill">💭</span>Live Chat</button>
+        <button data-page="bot" class="nav-item"><span class="icon-pill">🤖</span>Bot</button>
+        <button data-page="whatsapp" class="nav-item"><span class="icon-pill">📱</span>WhatsApp</button>
+        <button data-page="conversations" class="nav-item"><span class="icon-pill">🗨️</span>Conversations</button>
+        <button data-page="commands" class="nav-item"><span class="icon-pill">⚡</span>Commands</button>
+        <button data-page="activity" class="nav-item"><span class="icon-pill">📊</span>Activity</button>
       </nav>
 
       <div class="p-4 border-t border-[var(--line)]">
@@ -443,6 +449,187 @@
             <h3 class="text-sm font-semibold mb-3" style="color:#cdd7e8">System</h3>
             <button id="restartBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg px-4 py-2 text-sm">Restart bot</button>
             <p class="text-xs mt-2" style="color:var(--muted)">Restart reconnects using the saved session — no QR re-scan needed.</p>
+          </div>
+        </section>
+
+        <!-- Live Chat -->
+        <section id="page-livechat" class="page hidden space-y-7">
+          <div>
+            <h2 class="text-2xl font-extrabold grad-text">Live Chat</h2>
+            <p class="text-sm mt-1" style="color:var(--muted)">Test your bot directly from the dashboard</p>
+          </div>
+          <div class="card p-6">
+            <div id="testChatMessages" class="space-y-3 max-h-[420px] overflow-y-auto mb-4"></div>
+            <div class="flex gap-2">
+              <input id="testChatInput" type="text" placeholder="Type a message..." class="field flex-1 min-w-0 px-3 py-2 text-sm" />
+              <button id="testChatSend" class="btn px-4 py-2 text-sm font-semibold whitespace-nowrap">Send</button>
+              <button id="testChatClear" class="btn-ghost px-4 py-2 text-sm whitespace-nowrap">Clear</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bot Personality -->
+        <section id="page-bot" class="page hidden space-y-7">
+          <div>
+            <h2 class="text-2xl font-extrabold grad-text">Bot Personality</h2>
+            <p class="text-sm mt-1" style="color:var(--muted)">Control how your bot behaves and speaks</p>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Identity</h3>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Bot name</label>
+                <input id="botName" type="text" value="WA Bot" class="field w-full px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Personality</label>
+                <select id="botPersonality" class="field w-full px-3 py-2 text-sm">
+                  <option>Sarcastic Teen</option>
+                  <option>Professional</option>
+                  <option>Customer Support</option>
+                  <option>Tech Expert</option>
+                  <option>Motivational Coach</option>
+                  <option>Mysterious Oracle</option>
+                  <option>Custom</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Tone</label>
+                <select id="botTone" class="field w-full px-3 py-2 text-sm">
+                  <option>Casual</option>
+                  <option>Friendly</option>
+                  <option>Formal</option>
+                  <option>Witty</option>
+                  <option>Aggressive</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Speaking style</label>
+                <select id="botStyle" class="field w-full px-3 py-2 text-sm">
+                  <option>Concise</option>
+                  <option>Balanced</option>
+                  <option>Verbose</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Emoji usage</label>
+                <select id="botEmoji" class="field w-full px-3 py-2 text-sm">
+                  <option>None</option>
+                  <option>Light</option>
+                  <option>Moderate</option>
+                  <option>Heavy</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Response length</label>
+                <select id="botLength" class="field w-full px-3 py-2 text-sm">
+                  <option>Short</option>
+                  <option>Medium</option>
+                  <option>Long</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Language</label>
+                <input id="botLanguage" type="text" value="English" class="field w-full px-3 py-2 text-sm" />
+              </div>
+              <button id="savePersonality" class="btn w-full py-2 text-sm font-semibold">Save personality</button>
+            </div>
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Custom instructions</h3>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Greeting message</label>
+                <textarea id="botGreeting" rows="2" placeholder="Hello! I am your bot..." class="field w-full px-3 py-2 text-sm"></textarea>
+              </div>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Things the bot should avoid</label>
+                <textarea id="botAvoid" rows="3" placeholder="Politics, medical advice, etc." class="field w-full px-3 py-2 text-sm"></textarea>
+              </div>
+              <div>
+                <label class="text-xs font-medium block mb-1" style="color:#cdd7e8">System prompt</label>
+                <textarea id="customPrompt" rows="8" placeholder="Write the full system prompt here..." class="field w-full px-3 py-2 text-sm"></textarea>
+              </div>
+              <button id="saveCustomPrompt" class="btn w-full py-2 text-sm font-semibold">Save prompt</button>
+              <div class="card p-4 space-y-2">
+                <h3 class="text-xs font-semibold" style="color:#cdd7e8">Live preview</h3>
+                <div id="personalityPreview" class="text-sm" style="color:var(--muted)">Preview will appear here after you save.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- WhatsApp Connection -->
+        <section id="page-whatsapp" class="page hidden space-y-7">
+          <div>
+            <h2 class="text-2xl font-extrabold grad-text">WhatsApp</h2>
+            <p class="text-sm mt-1" style="color:var(--muted)">Connection and session management</p>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card p-6 space-y-4">
+              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Connection</h3>
+              <div class="flex items-center gap-3">
+                <span id="waStatus" class="w-3 h-3 rounded-full bg-gray-500"></span>
+                <span id="waStatusText" class="text-sm font-medium">Disconnected</span>
+              </div>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between"><span class="label">Number</span><strong id="waNumber">—</strong></div>
+                <div class="flex justify-between"><span class="label">Session</span><strong id="waSession">—</strong></div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button id="connectBtn" class="btn px-4 py-2 text-sm font-semibold">Connect</button>
+                <button id="disconnectBtn" class="btn-ghost px-4 py-2 text-sm">Disconnect</button>
+                <button id="reconnectBtn" class="btn-ghost px-4 py-2 text-sm">Reconnect</button>
+              </div>
+            </div>
+            <div class="card p-6">
+              <h3 class="text-sm font-semibold mb-4" style="color:#cdd7e8">QR Code</h3>
+              <div id="waQr" class="bg-white rounded-lg min-h-[200px] flex items-center justify-center overflow-hidden">
+                <p class="text-gray-500 text-sm p-4 text-center">QR will appear here when needed.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Conversations -->
+        <section id="page-conversations" class="page hidden space-y-7">
+          <div>
+            <h2 class="text-2xl font-extrabold grad-text">Conversations</h2>
+            <p class="text-sm mt-1" style="color:var(--muted)">Browse chats and history</p>
+          </div>
+          <div class="card p-6">
+            <div class="flex flex-wrap gap-2 mb-4">
+              <input id="chatSearch" type="text" placeholder="Search chats..." class="field flex-1 min-w-0 px-3 py-2 text-sm" />
+              <button id="chatSearchBtn" class="btn px-4 py-2 text-sm font-semibold">Search</button>
+            </div>
+            <div id="chatHistory" class="space-y-2"></div>
+          </div>
+        </section>
+
+        <!-- Commands -->
+        <section id="page-commands" class="page hidden space-y-7">
+          <div>
+            <h2 class="text-2xl font-extrabold grad-text">Commands</h2>
+            <p class="text-sm mt-1" style="color:var(--muted)">Manage bot commands and triggers</p>
+          </div>
+          <div class="card p-6 space-y-4">
+            <div class="flex flex-wrap gap-2">
+              <input id="commandName" type="text" placeholder="Command name" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
+              <input id="commandResponse" type="text" placeholder="Response text" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
+              <button id="addCommand" class="btn px-4 py-2 text-sm font-semibold whitespace-nowrap">Add</button>
+            </div>
+            <div id="commandList" class="space-y-2"></div>
+          </div>
+        </section>
+
+        <!-- Activity -->
+        <section id="page-activity" class="page hidden space-y-7">
+          <div>
+            <h2 class="text-2xl font-extrabold grad-text">Activity</h2>
+            <p class="text-sm mt-1" style="color:var(--muted)">Real-time bot events and logs</p>
+          </div>
+          <div class="card p-6">
+            <div id="activityLog" class="terminal">
+              <div class="log-line"><span class="log-time">--:--:--</span><span class="log-type info">SYSTEM</span>Waiting for events...</div>
+            </div>
           </div>
         </section>
       </div>
@@ -806,6 +993,153 @@
       if(!btn) return;
       act(()=>api('/api/triggers',{action:'delete',id:Number(btn.dataset.triggerId)}),'Trigger deleted','Could not delete trigger');
     });
+
+    const testChatMessages=el('testChatMessages');
+    const testChatInput=el('testChatInput');
+    const testChatSend=el('testChatSend');
+    const testChatClear=el('testChatClear');
+    if(testChatSend&&testChatInput){
+      const sendTestMessage=async()=>{
+        const text=testChatInput.value.trim();
+        if(!text) return;
+        testChatInput.value='';
+        appendTestChat('You',text,'chat-user');
+        testChatInput.disabled=true;
+        testChatSend.disabled=true;
+        try{
+          const data=await api('/api/ai/ask',{text});
+          appendTestChat(data.botName||'Bot',data.reply||data.text||'...','chat-bot');
+        }catch(e){
+          appendTestChat('System','Error: '+e.message,'chat-bot');
+        }finally{
+          testChatInput.disabled=false;
+          testChatSend.disabled=false;
+          testChatInput.focus();
+        }
+      };
+      testChatSend.addEventListener('click',sendTestMessage);
+      testChatInput.addEventListener('keydown',(e)=>{if(e.key==='Enter')sendTestMessage();});
+    }
+    if(testChatClear){
+      testChatClear.addEventListener('click',()=>{if(testChatMessages)testChatMessages.innerHTML='';});
+    }
+
+    function appendTestChat(sender,text,cls){
+      if(!testChatMessages) return;
+      const row=document.createElement('div');
+      row.className='fade-in flex flex-col '+(cls==='chat-user'?'items-end':'items-start');
+      row.innerHTML=`<div class="text-[10px] font-semibold mb-1 px-1" style="color:var(--muted)">${esc(sender)}</div><div class="chat-bubble ${cls}">${esc(text).replace(/\n/g,'<br>')}</div>`;
+      testChatMessages.appendChild(row);
+      testChatMessages.scrollTop=testChatMessages.scrollHeight;
+    }
+
+    const savePersonality=el('savePersonality');
+    if(savePersonality){
+      savePersonality.addEventListener('click',()=>{
+        const payload={
+          name:el('botName')?.value||'WA Bot',
+          personality:el('botPersonality')?.value||'',
+          tone:el('botTone')?.value||'',
+          style:el('botStyle')?.value||'',
+          emoji:el('botEmoji')?.value||'None',
+          length:el('botLength')?.value||'Medium',
+          language:el('botLanguage')?.value||'English',
+          greeting:el('botGreeting')?.value||'',
+          avoid:el('botAvoid')?.value||''
+        };
+        act(()=>api('/api/personality',payload),'Personality saved','Could not save personality');
+      });
+    }
+
+    const saveCustomPrompt=el('saveCustomPrompt');
+    const personalityPreview=el('personalityPreview');
+    if(saveCustomPrompt){
+      saveCustomPrompt.addEventListener('click',()=>{
+        const text=el('customPrompt')?.value||'';
+        act(()=>api('/api/settings/ai-prompt',{text}),'Prompt saved','Could not save prompt');
+        if(personalityPreview) personalityPreview.textContent=text||'Preview will appear here after you save.';
+      });
+    }
+
+    const connectBtn=el('connectBtn');
+    const disconnectBtn=el('disconnectBtn');
+    const reconnectBtn=el('reconnectBtn');
+    if(connectBtn){connectBtn.addEventListener('click',()=>act(()=>api('/api/connect',{}),'Connect requested','Could not connect'));}
+    if(disconnectBtn){disconnectBtn.addEventListener('click',()=>act(()=>api('/api/disconnect',{}),'Disconnected','Could not disconnect'));}
+    if(reconnectBtn){reconnectBtn.addEventListener('click',()=>act(()=>api('/api/restart',{}),'Reconnecting…','Could not reconnect'));}
+
+    function renderWaConnection(d){
+      const waStatus=el('waStatus');
+      const waStatusText=el('waStatusText');
+      const waNumber=el('waNumber');
+      const waSession=el('waSession');
+      if(waStatus){waStatus.className='w-3 h-3 rounded-full '+(d.online?'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]':'bg-gray-500');}
+      if(waStatusText) waStatusText.textContent=d.online?'Connected':'Disconnected';
+      if(waNumber) waNumber.textContent=d.connectedNumber||'—';
+      if(waSession) waSession.textContent=d.sessionSaved?'Saved':'Not saved';
+    }
+
+    function renderConversations(d){
+      const wrap=el('chatHistory');
+      const search=el('chatSearch')?.value?.trim().toLowerCase();
+      const list=(d.knownChatsList||[]).filter((c)=>!search||((c.displayName||c.chatId)).toLowerCase().includes(search));
+      if(!wrap) return;
+      if(!list.length){wrap.innerHTML='<p class="text-sm" style="color:var(--muted)">No chats found.</p>';return;}
+      wrap.innerHTML=list.map((c)=>`<div class="flex flex-wrap items-center gap-3 p-3 card"><div class="flex-1 min-w-0"><div class="text-sm text-gray-200 font-medium truncate">${esc(c.displayName||c.chatId)}</div><div class="text-xs truncate" style="color:var(--muted)">${esc(c.chatId)}</div></div><div class="text-xs" style="color:var(--muted)">${c.aiEnabled?'AI':'No AI'} ${c.autoReply?'· Auto':''}</div></div>`).join('');
+    }
+
+    const chatSearchBtn=el('chatSearchBtn');
+    if(chatSearchBtn){chatSearchBtn.addEventListener('click',()=>{if(statusCache) renderConversations(statusCache);});}
+    if(el('chatSearch')){el('chatSearch').addEventListener('keydown',(e)=>{if(e.key==='Enter'){if(statusCache) renderConversations(statusCache);}});}
+
+    function renderCommands(list){
+      const wrap=el('commandList');
+      if(!wrap) return;
+      if(!list.length){wrap.innerHTML='<p class="text-sm" style="color:var(--muted)">No commands configured.</p>';return;}
+      wrap.innerHTML=list.map((c)=>`<div class="flex flex-wrap items-center gap-3 p-3 card"><div class="flex-1 min-w-0"><div class="text-sm text-gray-200 font-medium">!${esc(c.name)}</div><div class="text-xs" style="color:var(--muted)">${esc(c.response||'')}</div></div><button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-cmd-name="${esc(c.name)}">Delete</button></div>`).join('');
+    }
+
+    const addCommand=el('addCommand');
+    if(addCommand){
+      addCommand.addEventListener('click',async()=>{
+        const name=el('commandName')?.value.trim().replace(/^!+/,'');
+        const response=el('commandResponse')?.value.trim();
+        if(!name||!response){toast('Command name and response required',true);return;}
+        try{await api('/api/commands',{action:'add',name,response});el('commandName').value='';el('commandResponse').value='';if(statusCache){const cmds=statusCache.commands||[];renderCommands(cmds);}}
+        catch(e){toast('Could not add command: '+e.message,true);}
+      });
+    }
+
+    if(el('commandList')){
+      el('commandList').addEventListener('click',async(e)=>{
+        const btn=e.target.closest('button[data-cmd-name]');
+        if(!btn) return;
+        try{await api('/api/commands',{action:'delete',name:btn.dataset.cmdName});if(statusCache){const cmds=statusCache.commands||[];renderCommands(cmds);}}
+        catch(e){toast('Could not delete command: '+e.message,true);}
+      });
+    }
+
+    const activityLog=el('activityLog');
+    function appendActivity(type,msg){
+      if(!activityLog) return;
+      const now=new Date().toLocaleTimeString();
+      const cls=type==='error'?'error':type==='warn'?'warn':type==='connect'?'connect':'info';
+      const row=document.createElement('div');
+      row.className='log-line fade-in';
+      row.innerHTML=`<span class="log-time">${now}</span><span class="log-type ${cls}">${type.toUpperCase()}</span>${esc(msg)}`;
+      activityLog.appendChild(row);
+      activityLog.scrollTop=activityLog.scrollHeight;
+    }
+
+    const originalRenderAll=renderAll;
+    renderAll=function(d){
+      renderWaConnection(d);
+      renderConversations(d);
+      const cmds=d.commands||[];
+      renderCommands(cmds);
+      if(d.activityLog?.length){d.activityLog.forEach((a)=>appendActivity(a.type,a.message));}
+      originalRenderAll(d);
+    };
 
     refresh();
     setInterval(refresh,POLL_MS);
