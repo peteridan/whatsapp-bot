@@ -19,6 +19,12 @@ state.store = storeModule.loadStore();
 
 async function startBot() {
     try {
+        if (!config.GROQ_MODEL && config.getGroqModel) {
+            const model = await config.getGroqModel();
+            config.GROQ_MODEL = model;
+            console.log('Resolved Groq model:', model);
+        }
+
         socket.startSock();
 
         const server = routes.createServerInstance();
