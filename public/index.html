@@ -15,12 +15,12 @@
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
-            ink: '#05080f',
-            panel: '#0a0f1c',
-            surface: '#0f1626',
-            line: '#1a2540',
-            accent: '#10b981',
-            accent2: '#6366f1'
+            ink: '#060608',
+            panel: '#0c0d10',
+            surface: '#101216',
+            line: '#23262c',
+            accent: '#0a84ff',
+            accent2: '#5e5ce6'
           }
         }
       }
@@ -28,132 +28,171 @@
   </script>
   <style>
     :root {
-      --bg: #05080f;
-      --panel: #0a0f1c;
-      --surface: #0f1626;
-      --line: #1a2540;
-      --muted: #7b8ca6;
-      --accent: #10b981;
-      --accent2: #6366f1;
-      --accent-dim: rgba(16,185,129,.12);
-      --danger: #ff4d4d;
-      --warning: #fbbf24;
+      --bg: #06070a;
+      --panel: rgba(255,255,255,.055);
+      --panel-solid: #101216;
+      --surface: rgba(255,255,255,.04);
+      --line: rgba(255,255,255,.11);
+      --highlight: rgba(255,255,255,.5);
+      --muted: #96a0ad;
+      --text: #f2f4f7;
+      --accent: #0a84ff;
+      --accent2: #5e5ce6;
+      --accent-dim: rgba(10,132,255,.16);
+      --danger: #ff453a;
+      --danger-dim: rgba(255,69,58,.14);
+      --warning: #ff9f0a;
     }
     [data-theme="light"] {
-      --bg: #f1f5f9;
-      --panel: #ffffff;
-      --surface: #ffffff;
-      --line: #e2e8f0;
-      --muted: #64748b;
-      --accent: #059669;
-      --accent2: #4f46e5;
-      --accent-dim: rgba(5,150,105,.12);
+      --bg: #eef1f5;
+      --panel: rgba(255,255,255,.6);
+      --panel-solid: #ffffff;
+      --surface: rgba(255,255,255,.55);
+      --line: rgba(15,23,42,.10);
+      --highlight: rgba(255,255,255,.9);
+      --muted: #5b6472;
+      --text: #12141a;
+      --accent: #0066e6;
+      --accent2: #5856d6;
+      --accent-dim: rgba(0,102,230,.10);
     }
-    html, body { background: var(--bg); color: #e6ecf5; }
+    html, body { background: var(--bg); color: var(--text); }
     body {
+      min-height: 100vh;
       background:
-        radial-gradient(1000px 600px at 10% -10%, rgba(99,102,241,.10), transparent 60%),
-        radial-gradient(1000px 600px at 90% -10%, rgba(16,185,129,.08), transparent 55%),
+        radial-gradient(900px 560px at 8% -8%, rgba(94,92,230,.22), transparent 58%),
+        radial-gradient(1000px 640px at 96% 4%, rgba(10,132,255,.20), transparent 55%),
+        radial-gradient(800px 700px at 50% 115%, rgba(191,90,242,.12), transparent 60%),
+        var(--bg);
+      background-attachment: fixed;
+    }
+    [data-theme="light"] body {
+      background:
+        radial-gradient(900px 560px at 8% -8%, rgba(94,92,230,.14), transparent 58%),
+        radial-gradient(1000px 640px at 96% 4%, rgba(10,132,255,.13), transparent 55%),
+        radial-gradient(800px 700px at 50% 115%, rgba(191,90,242,.08), transparent 60%),
         var(--bg);
     }
-    [data-theme="light"] body { color: #0f172a; }
+
+    /* ── Liquid glass base ──────────────────────────────── */
     .glass {
-      background: rgba(10,15,28,.72);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: var(--panel);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
       border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 var(--highlight), inset 0 0 0 1px rgba(255,255,255,.02), 0 20px 50px -20px rgba(0,0,0,.55);
     }
-    [data-theme="light"] .glass { background: rgba(255,255,255,.78); }
+    [data-theme="light"] .glass { box-shadow: inset 0 1px 0 var(--highlight), 0 20px 50px -24px rgba(15,23,42,.18); }
+
     .card {
-      background: linear-gradient(160deg, var(--surface), var(--panel));
+      background: var(--panel);
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
       border: 1px solid var(--line);
-      border-radius: 1rem;
+      border-radius: 1.4rem;
+      box-shadow: inset 0 1px 0 var(--highlight), 0 12px 30px -18px rgba(0,0,0,.5);
       transition: border-color .2s, transform .15s, box-shadow .2s;
     }
-    .card:hover { border-color: rgba(16,185,129,.25); transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,.25); }
+    .card:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); transform: translateY(-1px); box-shadow: inset 0 1px 0 var(--highlight), 0 18px 40px -18px rgba(0,0,0,.5); }
+
     .grad-text {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
-    .glow { box-shadow: 0 0 24px rgba(16,185,129,.18); }
-    .glow-text { text-shadow: 0 0 18px rgba(16,185,129,.35); }
+    .glow { box-shadow: 0 0 24px rgba(10,132,255,.20); }
+    .glow-text { text-shadow: 0 0 18px rgba(10,132,255,.30); }
+
+    .stat-num { font-size: 1.6rem; font-weight: 800; letter-spacing: -.02em; color: var(--text); }
+    .label { color: var(--muted); }
+    .chat-avatar { background: var(--panel-solid); }
+
     .nav-item {
       display: flex; align-items: center; gap: .6rem;
       width: 100%; text-align: left;
-      padding: .65rem .85rem; border-radius: .85rem;
+      padding: .65rem .85rem; border-radius: 1rem;
       font-size: .875rem; font-weight: 600;
       color: var(--muted); transition: all .15s ease;
     }
-    .nav-item:hover { background: rgba(255,255,255,.04); color: #cdd7e8; }
-    [data-theme="light"] .nav-item:hover { background: rgba(0,0,0,.04); color: #1f2937; }
+    .nav-item:hover { background: rgba(255,255,255,.06); color: var(--text); }
+    [data-theme="light"] .nav-item:hover { background: rgba(15,23,42,.05); color: #1f2937; }
     .nav-item.active {
       color: #fff;
-      background: linear-gradient(90deg, var(--accent-dim), transparent);
-      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-      box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 15%, transparent) inset;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: 1px solid transparent;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 8px 20px -8px color-mix(in srgb, var(--accent) 60%, transparent);
     }
-    [data-theme="light"] .nav-item.active { color: #06281d; }
+    [data-theme="light"] .nav-item.active { color: #fff; }
     .icon-pill {
       width: 2rem; height: 2rem; flex: 0 0 auto;
       display: grid; place-items: center;
-      border-radius: .65rem;
-      background: rgba(255,255,255,.05);
+      border-radius: .75rem;
+      background: rgba(255,255,255,.06);
       font-size: .95rem;
     }
+    [data-theme="light"] .icon-pill { background: rgba(15,23,42,.05); }
     .nav-item.active .icon-pill {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background: rgba(255,255,255,.18);
       color: #fff;
     }
     .btn {
-      background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--accent2)));
-      color: #04130d; font-weight: 700;
-      border-radius: .6rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-weight: 700;
+      border-radius: .85rem;
+      border: 1px solid transparent;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 8px 20px -10px color-mix(in srgb, var(--accent) 65%, transparent);
       transition: filter .15s ease, transform .05s ease;
     }
     .btn:hover { filter: brightness(1.08); }
     .btn:active { transform: translateY(1px); }
-    [data-theme="light"] .btn { color: #fff; }
     .btn-ghost {
-      background: var(--panel); border: 1px solid var(--line);
-      color: var(--muted); border-radius: .6rem; transition: all .15s ease;
+      background: var(--panel); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--line);
+      color: var(--muted); border-radius: .85rem; transition: all .15s ease;
+      box-shadow: inset 0 1px 0 var(--highlight);
     }
     .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
     .field {
-      background: var(--panel); border: 1px solid var(--line);
-      color: inherit; border-radius: .6rem;
+      background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      color: inherit; border-radius: .85rem;
     }
     .field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
     .toggle {
       width: 2.5rem; height: 1.25rem; border-radius: 999px;
       background: var(--line); appearance: none; cursor: pointer; position: relative;
       transition: background .15s ease; flex: 0 0 auto;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
     }
     .toggle::after {
       content: ""; position: absolute; top: 2px; left: 2px;
-      width: 1rem; height: 1rem; border-radius: 999px; background: #cdd7e8;
+      width: 1rem; height: 1rem; border-radius: 999px; background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.35);
       transition: transform .15s ease;
     }
     .toggle:checked { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
-    .toggle:checked::after { transform: translateX(1.25rem); background: #fff; }
+    .toggle:checked::after { transform: translateX(1.25rem); }
     .pill { padding: .25rem .75rem; border-radius: 999px; font-size: .75rem; font-weight: 600; }
     .pill-on { background: var(--accent-dim); color: var(--accent); }
-    .pill-off { background: rgba(255,77,77,.12); color: #ff8080; }
+    .pill-off { background: var(--danger-dim); color: var(--danger); }
     .mini-btn {
       border: 1px solid var(--line); background: var(--panel);
-      color: var(--muted); border-radius: .6rem; transition: all .15s ease;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: var(--muted); border-radius: .7rem; transition: all .15s ease;
       font-size: .8rem; padding: .35rem .7rem;
     }
     .mini-btn:hover { border-color: var(--accent); color: var(--accent); }
     .terminal {
-      background: rgba(5,8,15,.85);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
       border: 1px solid var(--line);
-      border-radius: .75rem;
+      border-radius: 1rem;
       font-family: 'Courier New', monospace;
       font-size: .8rem;
       color: #a5b4c8;
       padding: 1rem;
       max-height: 420px;
       overflow-y: auto;
+      box-shadow: inset 0 1px 0 var(--highlight);
     }
     .terminal .log-line { margin: 2px 0; }
     .terminal .log-time { color: var(--muted); margin-right: .5rem; }
@@ -176,26 +215,27 @@
     .chat-bubble {
       max-width: 78%;
       padding: .6rem .9rem;
-      border-radius: .85rem;
+      border-radius: 1rem;
       font-size: .9rem;
       line-height: 1.35;
       word-wrap: break-word;
     }
     .chat-user {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #04130d;
-      border-bottom-right-radius: .25rem;
+      color: #fff;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.3);
+      border-bottom-right-radius: .3rem;
       align-self: flex-end;
     }
-    [data-theme="light"] .chat-user { color: #fff; }
     .chat-bot {
-      background: var(--surface);
+      background: var(--panel);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--line);
-      color: #e6ecf5;
-      border-bottom-left-radius: .25rem;
+      color: var(--text);
+      box-shadow: inset 0 1px 0 var(--highlight);
+      border-bottom-left-radius: .3rem;
       align-self: flex-start;
     }
-    [data-theme="light"] .chat-bot { color: #0f172a; }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -203,7 +243,7 @@
 </head>
 <body class="font-sans antialiased overflow-x-hidden">
   <div id="sidebarBackdrop" class="fixed inset-0 bg-black/60 z-30 hidden lg:hidden"></div>
-  <header class="lg:hidden flex items-center justify-between px-4 py-3 border-b border-[var(--line)] bg-[var(--panel)]/90 backdrop-blur sticky top-0 z-20">
+  <header class="lg:hidden flex items-center justify-between px-4 py-3 border-b border-[var(--line)] glass sticky top-0 z-20">
     <button id="menuBtn" class="p-2 -ml-2 rounded-lg hover:bg-white/5" aria-label="Menu">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
@@ -265,7 +305,7 @@
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6">
-              <h3 class="text-sm font-semibold mb-4" style="color:#cdd7e8">Connection</h3>
+              <h3 class="text-sm font-semibold mb-4" style="color:var(--text)">Connection</h3>
               <div class="space-y-3 text-sm">
                 <div class="flex justify-between"><span class="label">Status</span><span id="statusPill" class="px-2 py-0.5 rounded-full text-xs font-semibold pill-off">● Offline</span></div>
                 <div class="flex justify-between"><span class="label">Number</span><strong id="connectedNumber">—</strong></div>
@@ -277,7 +317,7 @@
             </div>
 
             <div class="card p-6">
-              <h3 class="text-sm font-semibold mb-4" style="color:#cdd7e8">QR Code</h3>
+              <h3 class="text-sm font-semibold mb-4" style="color:var(--text)">QR Code</h3>
               <div id="qrBox" class="bg-white rounded-lg min-h-[200px] flex items-center justify-center overflow-hidden">
                 <p class="text-gray-500 text-sm p-4 text-center">Waiting for QR code…</p>
               </div>
@@ -293,14 +333,14 @@
           </div>
 
           <div class="card p-6">
-            <h3 class="text-sm font-semibold mb-4" style="color:#cdd7e8">Known Chats</h3>
+            <h3 class="text-sm font-semibold mb-4" style="color:var(--text)">Known Chats</h3>
             <div id="chatList" class="space-y-2">
               <p class="text-sm" style="color:var(--muted)">No known chats yet.</p>
             </div>
           </div>
 
           <div class="card p-6">
-            <h3 class="text-sm font-semibold mb-4" style="color:#cdd7e8">Schedule Message</h3>
+            <h3 class="text-sm font-semibold mb-4" style="color:var(--text)">Schedule Message</h3>
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
               <select id="scheduleChat" class="field px-3 py-2 text-sm w-full"></select>
               <input id="scheduleMinutes" type="number" min="1" placeholder="Minutes" class="field px-3 py-2 text-sm w-full" />
@@ -320,7 +360,7 @@
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Moderation Controls</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Moderation Controls</h3>
               <select id="modChatSelect" class="field px-3 py-2 text-sm w-full"></select>
               <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
                 <div><div class="text-sm font-medium">Anti-spam</div><div class="text-xs" style="color:var(--muted)">Warn/kick after repeated fast messages</div></div>
@@ -338,7 +378,7 @@
             </div>
 
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Word Filters</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Word Filters</h3>
               <div class="flex flex-wrap gap-2">
                 <input id="modWordInput" type="text" placeholder="Word to block" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
                 <button id="modWordAdd" class="btn px-4 py-2 text-sm font-semibold whitespace-nowrap">Add</button>
@@ -349,7 +389,7 @@
           </div>
 
           <div class="card p-6">
-            <h3 class="text-sm font-semibold mb-2" style="color:#cdd7e8">Join / Leave Log</h3>
+            <h3 class="text-sm font-semibold mb-2" style="color:var(--text)">Join / Leave Log</h3>
             <p class="text-xs mb-3" style="color:var(--muted)">Set a dedicated WhatsApp chat to receive join and leave events.</p>
             <div class="flex flex-wrap gap-2">
               <input id="logChatInput" type="text" placeholder="Chat ID" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
@@ -369,7 +409,7 @@
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Bot Behaviour</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Bot Behaviour</h3>
               <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
                 <div><div class="text-sm font-medium">Global AI</div><div class="text-xs" style="color:var(--muted)">AI replies in all chats by default</div></div>
                 <input type="checkbox" id="globalAiToggle" class="toggle" />
@@ -389,20 +429,20 @@
             </div>
 
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Theme</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Theme</h3>
               <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
                 <div><div class="text-sm font-medium">Dark mode</div><div class="text-xs" style="color:var(--muted)">Use dark color scheme</div></div>
                 <input type="checkbox" id="darkModeToggle" class="toggle" />
               </label>
               <div>
-                <label class="text-sm font-medium block mb-2" style="color:#cdd7e8">Accent color</label>
+                <label class="text-sm font-medium block mb-2" style="color:var(--text)">Accent color</label>
                 <select id="accentColor" class="field px-3 py-2 text-sm w-full">
-                  <option value="#10b981">Emerald</option>
-                  <option value="#6366f1">Indigo</option>
-                  <option value="#8b5cf6">Purple</option>
-                  <option value="#f59e0b">Amber</option>
-                  <option value="#ef4444">Red</option>
-                  <option value="#3b82f6">Blue</option>
+                  <option value="#0a84ff">Blue</option>
+                  <option value="#5e5ce6">Indigo</option>
+                  <option value="#bf5af2">Purple</option>
+                  <option value="#ff9f0a">Orange</option>
+                  <option value="#ff453a">Red</option>
+                  <option value="#30d158">Green</option>
                 </select>
               </div>
             </div>
@@ -410,14 +450,14 @@
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Default AI Prompt</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Default AI Prompt</h3>
               <select id="aiPersonality" class="field px-3 py-2 text-sm w-full"></select>
               <textarea id="aiPrompt" rows="5" placeholder="How the bot should behave…" class="field w-full px-3 py-2 text-sm"></textarea>
               <button id="savePrompt" class="btn px-4 py-2 text-sm font-semibold w-full">Save prompt</button>
             </div>
 
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Auto-Promote</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Auto-Promote</h3>
               <p class="text-xs" style="color:var(--muted)">Users who hit message milestones in a group get auto-promoted to admin.</p>
               <input id="autoPromoThresholds" type="text" placeholder="e.g. 100, 500, 1000" class="field w-full px-3 py-2 text-sm" />
               <button id="saveAutoPromo" class="btn px-4 py-2 text-sm font-semibold w-full">Save thresholds</button>
@@ -427,14 +467,14 @@
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Broadcast</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Broadcast</h3>
               <textarea id="broadcastText" rows="4" placeholder="Broadcast text…" class="field w-full px-3 py-2 text-sm"></textarea>
               <button id="sendBroadcast" class="btn px-4 py-2 text-sm font-semibold w-full">Send broadcast</button>
               <p id="broadcastInfo" class="text-xs" style="color:var(--muted)"></p>
             </div>
 
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Keyword Auto-Replies</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Keyword Auto-Replies</h3>
               <p class="text-xs" style="color:var(--muted)">Create keyword-triggered replies that bypass the AI.</p>
               <div class="flex flex-wrap gap-2">
                 <input id="triggerKeyword" type="text" placeholder="Keyword" class="field flex-1 min-w-0 px-3 py-2 text-sm" />
@@ -446,7 +486,7 @@
           </div>
 
           <div class="card p-6">
-            <h3 class="text-sm font-semibold mb-3" style="color:#cdd7e8">System</h3>
+            <h3 class="text-sm font-semibold mb-3" style="color:var(--text)">System</h3>
             <button id="restartBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg px-4 py-2 text-sm">Restart bot</button>
             <p class="text-xs mt-2" style="color:var(--muted)">Restart reconnects using the saved session — no QR re-scan needed.</p>
           </div>
@@ -476,7 +516,7 @@
           </div>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Identity</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Identity</h3>
               <div>
                 <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Bot name</label>
                 <input id="botName" type="text" value="WA Bot" class="field w-full px-3 py-2 text-sm" />
@@ -535,7 +575,7 @@
               <button id="savePersonality" class="btn w-full py-2 text-sm font-semibold">Save personality</button>
             </div>
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Custom instructions</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Custom instructions</h3>
               <div>
                 <label class="text-xs font-medium block mb-1" style="color:var(--muted)">Greeting message</label>
                 <textarea id="botGreeting" rows="2" placeholder="Hello! I am your bot..." class="field w-full px-3 py-2 text-sm"></textarea>
@@ -545,12 +585,12 @@
                 <textarea id="botAvoid" rows="3" placeholder="Politics, medical advice, etc." class="field w-full px-3 py-2 text-sm"></textarea>
               </div>
               <div>
-                <label class="text-xs font-medium block mb-1" style="color:#cdd7e8">System prompt</label>
+                <label class="text-xs font-medium block mb-1" style="color:var(--text)">System prompt</label>
                 <textarea id="customPrompt" rows="8" placeholder="Write the full system prompt here..." class="field w-full px-3 py-2 text-sm"></textarea>
               </div>
               <button id="saveCustomPrompt" class="btn w-full py-2 text-sm font-semibold">Save prompt</button>
               <div class="card p-4 space-y-2">
-                <h3 class="text-xs font-semibold" style="color:#cdd7e8">Live preview</h3>
+                <h3 class="text-xs font-semibold" style="color:var(--text)">Live preview</h3>
                 <div id="personalityPreview" class="text-sm" style="color:var(--muted)">Preview will appear here after you save.</div>
               </div>
             </div>
@@ -565,7 +605,7 @@
           </div>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6 space-y-4">
-              <h3 class="text-sm font-semibold" style="color:#cdd7e8">Connection</h3>
+              <h3 class="text-sm font-semibold" style="color:var(--text)">Connection</h3>
               <div class="flex items-center gap-3">
                 <span id="waStatus" class="w-3 h-3 rounded-full bg-gray-500"></span>
                 <span id="waStatusText" class="text-sm font-medium">Disconnected</span>
@@ -581,7 +621,7 @@
               </div>
             </div>
             <div class="card p-6">
-              <h3 class="text-sm font-semibold mb-4" style="color:#cdd7e8">QR Code</h3>
+              <h3 class="text-sm font-semibold mb-4" style="color:var(--text)">QR Code</h3>
               <div id="waQr" class="bg-white rounded-lg min-h-[200px] flex items-center justify-center overflow-hidden">
                 <p class="text-gray-500 text-sm p-4 text-center">QR will appear here when needed.</p>
               </div>
@@ -636,7 +676,7 @@
     </main>
   </div>
 
-  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#141d2a] border border-gray-700 text-gray-200 px-5 py-3 rounded-xl text-sm opacity-0 pointer-events-none transition-all duration-200 translate-y-4 z-50 shadow-2xl"></div>
+  <div id="toast" class="glass fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-2xl text-sm opacity-0 pointer-events-none transition-all duration-200 translate-y-4 z-50" style="color:var(--text)"></div>
 
   <script>
     const POLL_MS = 1000;
@@ -651,9 +691,10 @@
     function toast(msg, isErr) {
       const t = el('toast');
       t.textContent = msg;
-      t.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl text-sm z-50 shadow-2xl transition-all duration-200 ' + (isErr ? 'bg-red-900/80 border border-red-700 text-red-200' : 'bg-[#141d2a] border border-gray-700 text-gray-200');
+      t.style.color = isErr ? 'var(--danger)' : 'var(--text)';
+      t.className = 'glass fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-2xl text-sm z-50 transition-all duration-200';
       clearTimeout(toast._t);
-      toast._t = setTimeout(() => { t.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl text-sm opacity-0 pointer-events-none transition-all duration-200 translate-y-4 z-50 shadow-2xl bg-[#141d2a] border border-gray-700 text-gray-200'; }, 2800);
+      toast._t = setTimeout(() => { t.className = 'glass fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-2xl text-sm opacity-0 pointer-events-none transition-all duration-200 translate-y-4 z-50'; }, 2800);
     }
 
     async function api(path, body) {
@@ -740,7 +781,7 @@
       if(autoViewStatusToggle) autoViewStatusToggle.checked=Boolean(d.autoViewStatus);
       if(autoBypassViewOnceToggle) autoBypassViewOnceToggle.checked=Boolean(d.autoBypassViewOnce);
       const darkModeToggle=el('darkModeToggle');
-      if(d.theme&&darkModeToggle){darkModeToggle.checked=d.theme.mode!=='light';const accent=el('accentColor');if(accent)accent.value=d.theme.accent||'#10b981';applyTheme(d.theme.mode,d.theme.accent);}
+      if(d.theme&&darkModeToggle){darkModeToggle.checked=d.theme.mode!=='light';const accent=el('accentColor');if(accent)accent.value=d.theme.accent||'#0a84ff';applyTheme(d.theme.mode,d.theme.accent);}
       const prompt=el('aiPrompt');
       if(prompt&&document.activeElement!==prompt&&prompt.value!==((d.defaultAiPrompt||''))){prompt.value=d.defaultAiPrompt||'';}
       const sel=el('aiPersonality');
@@ -776,7 +817,7 @@
         ].filter(Boolean).join('');
         return `<div class="flex flex-wrap items-center gap-3 p-3 card">
           <img class="chat-avatar w-9 h-9 rounded-full object-cover flex-shrink-0" data-jid="${esc(c.chatId)}" alt="" />
-          <div class="flex-1 min-w-0"><div class="text-sm text-gray-200 font-medium truncate">${esc(c.displayName||c.chatId)}</div><div class="text-xs truncate" style="color:var(--muted)">${esc(c.chatId)}</div></div>
+          <div class="flex-1 min-w-0"><div class="text-sm font-medium truncate" style="color:var(--text)">${esc(c.displayName||c.chatId)}</div><div class="text-xs truncate" style="color:var(--muted)">${esc(c.chatId)}</div></div>
           <div class="flex gap-1 flex-wrap">${tags}</div>
           <button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-chat="${esc(c.chatId)}" data-action="${c.muted?'unmute':'mute'}">${c.muted?'Unmute':'Mute'}</button>
         </div>`;
@@ -799,7 +840,7 @@
       if(!wrap) return;
       if(!list.length){wrap.innerHTML='<p class="text-sm" style="color:var(--muted)">No scheduled messages.</p>';return;}
       wrap.innerHTML=list.map((m)=>`<div class="flex flex-wrap items-center gap-3 p-3 card">
-        <div class="flex-1 min-w-0"><div class="text-sm text-gray-200 truncate">${esc(m.text)}</div><div class="text-xs" style="color:var(--muted)">${esc(m.chatId)} · in ${Math.max(0,Math.round((m.sendAt-Date.now())/60000))}m</div></div>
+        <div class="flex-1 min-w-0"><div class="text-sm truncate" style="color:var(--text)">${esc(m.text)}</div><div class="text-xs" style="color:var(--muted)">${esc(m.chatId)} · in ${Math.max(0,Math.round((m.sendAt-Date.now())/60000))}m</div></div>
         <button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-sched-id="${m.id}">Clear</button>
       </div>`).join('');
       const sel=el('scheduleChat');
@@ -813,7 +854,7 @@
       if(!wrap) return;
       if(!list.length){wrap.innerHTML='<p class="text-sm" style="color:var(--muted)">No keyword triggers configured.</p>';return;}
       wrap.innerHTML=list.map((t)=>`<div class="flex flex-wrap items-center gap-3 p-3 card">
-        <div class="flex-1 min-w-0"><div class="text-sm text-gray-200"><strong>${esc(t.keyword)}</strong></div><div class="text-xs" style="color:var(--muted)">${esc(t.reply)}</div></div>
+        <div class="flex-1 min-w-0"><div class="text-sm" style="color:var(--text)"><strong>${esc(t.keyword)}</strong></div><div class="text-xs" style="color:var(--muted)">${esc(t.reply)}</div></div>
         <button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-trigger-id="${t.id}">Delete</button>
       </div>`).join('');
     }
@@ -963,7 +1004,7 @@
 
     async function renderModerationWordList(chatId){
       if(!modWordList||!chatId) return;
-      try{const data=await api('/api/moderation/wordfilter',{chatId});const filters=data.filters||[];if(!filters.length){modWordList.innerHTML='<p class="text-sm" style="color:var(--muted)">No blocked words.</p>';return;}modWordList.innerHTML=filters.map((word)=>`<div class="flex flex-wrap items-center gap-3 p-3 card"><div class="flex-1 min-w-0 text-sm text-gray-200">${esc(word)}</div><button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-mod-word="${esc(word)}">Remove</button></div>`).join('');}
+      try{const data=await api('/api/moderation/wordfilter',{chatId});const filters=data.filters||[];if(!filters.length){modWordList.innerHTML='<p class="text-sm" style="color:var(--muted)">No blocked words.</p>';return;}modWordList.innerHTML=filters.map((word)=>`<div class="flex flex-wrap items-center gap-3 p-3 card"><div class="flex-1 min-w-0 text-sm" style="color:var(--text)">${esc(word)}</div><button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-mod-word="${esc(word)}">Remove</button></div>`).join('');}
       catch(e){modWordList.innerHTML='';}
     }
 
@@ -1085,7 +1126,7 @@
       const list=(d.knownChatsList||[]).filter((c)=>!search||((c.displayName||c.chatId)).toLowerCase().includes(search));
       if(!wrap) return;
       if(!list.length){wrap.innerHTML='<p class="text-sm" style="color:var(--muted)">No chats found.</p>';return;}
-      wrap.innerHTML=list.map((c)=>`<div class="flex flex-wrap items-center gap-3 p-3 card"><div class="flex-1 min-w-0"><div class="text-sm text-gray-200 font-medium truncate">${esc(c.displayName||c.chatId)}</div><div class="text-xs truncate" style="color:var(--muted)">${esc(c.chatId)}</div></div><div class="text-xs" style="color:var(--muted)">${c.aiEnabled?'AI':'No AI'} ${c.autoReply?'· Auto':''}</div></div>`).join('');
+      wrap.innerHTML=list.map((c)=>`<div class="flex flex-wrap items-center gap-3 p-3 card"><div class="flex-1 min-w-0"><div class="text-sm font-medium truncate" style="color:var(--text)">${esc(c.displayName||c.chatId)}</div><div class="text-xs truncate" style="color:var(--muted)">${esc(c.chatId)}</div></div><div class="text-xs" style="color:var(--muted)">${c.aiEnabled?'AI':'No AI'} ${c.autoReply?'· Auto':''}</div></div>`).join('');
     }
 
     const chatSearchBtn=el('chatSearchBtn');
@@ -1096,7 +1137,7 @@
       const wrap=el('commandList');
       if(!wrap) return;
       if(!list.length){wrap.innerHTML='<p class="text-sm" style="color:var(--muted)">No commands configured.</p>';return;}
-      wrap.innerHTML=list.map((c)=>`<div class="flex flex-wrap items-center gap-3 p-3 card"><div class="flex-1 min-w-0"><div class="text-sm text-gray-200 font-medium">!${esc(c.name)}</div><div class="text-xs" style="color:var(--muted)">${esc(c.response||'')}</div></div><button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-cmd-name="${esc(c.name)}">Delete</button></div>`).join('');
+      wrap.innerHTML=list.map((c)=>`<div class="flex flex-wrap items-center gap-3 p-3 card"><div class="flex-1 min-w-0"><div class="text-sm font-medium" style="color:var(--text)">!${esc(c.name)}</div><div class="text-xs" style="color:var(--muted)">${esc(c.response||'')}</div></div><button class="mini-btn text-xs px-3 py-1.5 rounded-lg whitespace-nowrap" data-cmd-name="${esc(c.name)}">Delete</button></div>`).join('');
     }
 
     const addCommand=el('addCommand');
