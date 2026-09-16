@@ -155,14 +155,17 @@
       background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--line);
       color: inherit; border-radius: .85rem;
+      transition: border-color .15s, transform .15s;
     }
+    .field:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
     .field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
     .toggle {
       width: 2.5rem; height: 1.25rem; border-radius: 999px;
       background: var(--line); appearance: none; cursor: pointer; position: relative;
-      transition: background .15s ease; flex: 0 0 auto;
+      transition: background .15s ease, transform .15s ease, box-shadow .15s ease; flex: 0 0 auto;
       box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
     }
+    .toggle:hover { transform: scale(1.06); box-shadow: inset 0 1px 2px rgba(0,0,0,.2), 0 0 0 4px var(--accent-dim); }
     .toggle::after {
       content: ""; position: absolute; top: 2px; left: 2px;
       width: 1rem; height: 1rem; border-radius: 999px; background: #fff;
@@ -172,15 +175,17 @@
     .toggle:checked { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
     .toggle:checked::after { transform: translateX(1.25rem); }
     .pill { padding: .25rem .75rem; border-radius: 999px; font-size: .75rem; font-weight: 600; }
-    .pill-on { background: var(--accent-dim); color: var(--accent); }
-    .pill-off { background: var(--danger-dim); color: var(--danger); }
+    .pill-on { background: var(--accent-dim); color: var(--accent); transition: box-shadow .2s, transform .15s; }
+    .pill-off { background: var(--danger-dim); color: var(--danger); transition: box-shadow .2s, transform .15s; }
+    .pill-on:hover { box-shadow: 0 0 0 4px var(--accent-dim); transform: translateY(-1px); }
+    .pill-off:hover { box-shadow: 0 0 0 4px var(--danger-dim); transform: translateY(-1px); }
     .mini-btn {
       border: 1px solid var(--line); background: var(--panel);
       backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       color: var(--muted); border-radius: .7rem; transition: all .15s ease;
       font-size: .8rem; padding: .35rem .7rem;
     }
-    .mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .mini-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px) scale(1.04); }
     .terminal {
       background: rgba(0,0,0,.35);
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
@@ -219,7 +224,9 @@
       font-size: .9rem;
       line-height: 1.35;
       word-wrap: break-word;
+      transition: transform .15s ease;
     }
+    .chat-bubble:hover { transform: scale(1.035); }
     .chat-user {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: #fff;
@@ -239,6 +246,86 @@
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
     ::-webkit-scrollbar-track { background: transparent; }
+
+    /* ── More hover touches ─────────────────────────────── */
+    .chat-avatar { background: var(--panel-solid); transition: transform .15s ease, box-shadow .15s ease; }
+    .chat-avatar:hover { transform: scale(1.12); box-shadow: 0 0 0 3px var(--accent-dim); }
+    #qrBox img, #waQr img { transition: transform .2s ease; }
+    #qrBox img:hover, #waQr img:hover { transform: scale(1.03); }
+    .settings-row { transition: background .15s ease, padding-left .15s ease; border-radius: .6rem; }
+    .settings-row:hover { background: rgba(255,255,255,.05); padding-left: .5rem; }
+    [data-theme="light"] .settings-row:hover { background: rgba(15,23,42,.04); }
+    #restartBtn { transition: transform .15s ease; }
+    #restartBtn:hover { animation: dangerShake .4s ease; }
+    @keyframes dangerShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-2px) rotate(-1deg); }
+      40% { transform: translateX(2px) rotate(1deg); }
+      60% { transform: translateX(-2px) rotate(-1deg); }
+      80% { transform: translateX(2px) rotate(1deg); }
+    }
+    .sidebar-live:hover { color: var(--text); }
+
+    /* ── Fun & interactive ──────────────────────────────── */
+    .card { will-change: transform; position: relative; overflow: hidden; }
+    .card::before {
+      content: "";
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(220px circle at var(--glint-x,50%) var(--glint-y,-20%), rgba(255,255,255,.16), transparent 60%);
+      opacity: 0; transition: opacity .25s ease;
+    }
+    .card:hover::before { opacity: 1; }
+    .card > * { position: relative; z-index: 1; }
+    .stat-card { cursor: grab; user-select: none; }
+    .stat-card:active { cursor: grabbing; }
+    .drag-handle {
+      font-size: .9rem; line-height: 1; color: var(--muted);
+      opacity: .5; cursor: grab; padding: 2px 4px; border-radius: .4rem;
+      transition: opacity .15s, background .15s;
+    }
+    .stat-card:hover .drag-handle { opacity: 1; }
+    .drag-handle:hover { background: rgba(255,255,255,.08); }
+    .stat-card.dragging {
+      opacity: .55; transform: scale(1.04) rotate(-2deg) !important;
+      box-shadow: 0 24px 50px -14px rgba(0,0,0,.6);
+      transition: none;
+    }
+    .stat-card.drag-over { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-dim), inset 0 1px 0 var(--highlight); }
+    .stat-card.pop-in { animation: popIn .35s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes popIn { 0% { transform: scale(.92); } 60% { transform: scale(1.02); } 100% { transform: scale(1); } }
+
+    .logo-badge { cursor: pointer; transition: transform .15s ease; }
+    .logo-badge:hover { transform: scale(1.08) rotate(-4deg); }
+    .logo-badge:active { transform: scale(.92) rotate(4deg); }
+
+    .icon-pill { transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
+    .nav-item:hover .icon-pill { transform: scale(1.15) rotate(-6deg); }
+    .nav-item.clicked { animation: navBounce .35s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes navBounce { 0% { transform: scale(1); } 40% { transform: scale(.94); } 100% { transform: scale(1); } }
+
+    .btn, .btn-ghost, .mini-btn { position: relative; overflow: hidden; }
+    .btn.pop-click, .btn-ghost.pop-click, .mini-btn.pop-click { animation: btnPop .3s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes btnPop { 0% { transform: scale(1); } 45% { transform: scale(.93); } 100% { transform: scale(1); } }
+    .ripple {
+      position: absolute; border-radius: 999px; pointer-events: none;
+      background: rgba(255,255,255,.55); transform: scale(0); opacity: .6;
+      animation: rippleOut .55s ease-out forwards;
+    }
+    @keyframes rippleOut { to { transform: scale(3.2); opacity: 0; } }
+
+    .confetti-piece {
+      position: fixed; top: -10px; z-index: 9999; pointer-events: none;
+      border-radius: 2px; will-change: transform, opacity;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translate(0,0) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--drift,0), 105vh) rotate(var(--spin,540deg)); opacity: .9; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .confetti-piece, .stat-card.pop-in, .nav-item.clicked, .btn.pop-click, .btn-ghost.pop-click, .mini-btn.pop-click, .logo-badge { animation: none !important; }
+      .card, .icon-pill { transition: none !important; }
+    }
   </style>
 </head>
 <body class="font-sans antialiased overflow-x-hidden">
@@ -258,7 +345,7 @@
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transition-transform duration-200 lg:relative lg:translate-x-0 glass border-r border-[var(--line)] flex flex-col shrink-0">
       <div class="p-5 border-b border-[var(--line)]">
         <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-extrabold text-base shadow-lg" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">WA</div>
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-extrabold text-base shadow-lg logo-badge" id="brandLogo" title="Psst… click me" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">WA</div>
           <div>
             <h1 class="text-sm font-bold leading-tight">Bot Control</h1>
             <span id="sidebarStatus" class="text-xs" style="color:var(--muted)">Connecting…</span>
@@ -280,7 +367,7 @@
       </nav>
 
       <div class="p-4 border-t border-[var(--line)]">
-        <div class="flex items-center gap-2 text-xs" style="color:var(--muted)">
+        <div class="flex items-center gap-2 text-xs sidebar-live" style="color:var(--muted); transition: color .15s ease; cursor: default;">
           <span id="liveDot" class="w-2 h-2 rounded-full bg-gray-500"></span>
           <span id="lastUpdateText">Not yet updated</span>
         </div>
@@ -296,12 +383,37 @@
             <p class="text-sm mt-1" style="color:var(--muted)">Live overview of your WhatsApp bot</p>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="card p-5"><div class="text-xs mb-2" style="color:var(--muted)">Uptime</div><div id="uptime" class="stat-num">—</div></div>
-            <div class="card p-5"><div class="text-xs mb-2" style="color:var(--muted)">Messages handled</div><div id="messagesHandled" class="stat-num">—</div></div>
-            <div class="card p-5"><div class="text-xs mb-2" style="color:var(--muted)">Commands run</div><div id="commandsHandled" class="stat-num">—</div></div>
-            <div class="card p-5"><div class="text-xs mb-2" style="color:var(--muted)">Known chats</div><div id="knownChats" class="stat-num">—</div></div>
+          <div id="statGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="card p-5 stat-card" draggable="true" data-stat-id="uptime">
+              <div class="flex items-start justify-between">
+                <div class="text-xs mb-2" style="color:var(--muted)">Uptime</div>
+                <span class="drag-handle" title="Drag to reorder">⠿</span>
+              </div>
+              <div id="uptime" class="stat-num">—</div>
+            </div>
+            <div class="card p-5 stat-card" draggable="true" data-stat-id="messages">
+              <div class="flex items-start justify-between">
+                <div class="text-xs mb-2" style="color:var(--muted)">Messages handled</div>
+                <span class="drag-handle" title="Drag to reorder">⠿</span>
+              </div>
+              <div id="messagesHandled" class="stat-num">—</div>
+            </div>
+            <div class="card p-5 stat-card" draggable="true" data-stat-id="commands">
+              <div class="flex items-start justify-between">
+                <div class="text-xs mb-2" style="color:var(--muted)">Commands run</div>
+                <span class="drag-handle" title="Drag to reorder">⠿</span>
+              </div>
+              <div id="commandsHandled" class="stat-num">—</div>
+            </div>
+            <div class="card p-5 stat-card" draggable="true" data-stat-id="chats">
+              <div class="flex items-start justify-between">
+                <div class="text-xs mb-2" style="color:var(--muted)">Known chats</div>
+                <span class="drag-handle" title="Drag to reorder">⠿</span>
+              </div>
+              <div id="knownChats" class="stat-num">—</div>
+            </div>
           </div>
+          <p class="text-xs -mt-4" style="color:var(--muted)">💡 Tip: drag the ⠿ handle to reorder your stats.</p>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6">
@@ -362,11 +474,11 @@
             <div class="card p-6 space-y-4">
               <h3 class="text-sm font-semibold" style="color:var(--text)">Moderation Controls</h3>
               <select id="modChatSelect" class="field px-3 py-2 text-sm w-full"></select>
-              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)] settings-row">
                 <div><div class="text-sm font-medium">Anti-spam</div><div class="text-xs" style="color:var(--muted)">Warn/kick after repeated fast messages</div></div>
                 <input type="checkbox" id="modAntiSpam" class="toggle" />
               </label>
-              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)] settings-row">
                 <div><div class="text-sm font-medium">Anti-link</div><div class="text-xs" style="color:var(--muted)">Delete messages containing links</div></div>
                 <input type="checkbox" id="modAntiLink" class="toggle" />
               </label>
@@ -410,15 +522,15 @@
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card p-6 space-y-4">
               <h3 class="text-sm font-semibold" style="color:var(--text)">Bot Behaviour</h3>
-              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)] settings-row">
                 <div><div class="text-sm font-medium">Global AI</div><div class="text-xs" style="color:var(--muted)">AI replies in all chats by default</div></div>
                 <input type="checkbox" id="globalAiToggle" class="toggle" />
               </label>
-              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)] settings-row">
                 <div><div class="text-sm font-medium">Private mode</div><div class="text-xs" style="color:var(--muted)">Only the owner can use commands</div></div>
                 <input type="checkbox" id="privateToggle" class="toggle" />
               </label>
-              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)] settings-row">
                 <div><div class="text-sm font-medium">Auto-view status</div><div class="text-xs" style="color:var(--muted)">Automatically view incoming statuses</div></div>
                 <input type="checkbox" id="autoViewStatusToggle" class="toggle" />
               </label>
@@ -430,7 +542,7 @@
 
             <div class="card p-6 space-y-4">
               <h3 class="text-sm font-semibold" style="color:var(--text)">Theme</h3>
-              <label class="flex items-center justify-between py-2 border-b border-[var(--line)]">
+              <label class="flex items-center justify-between py-2 border-b border-[var(--line)] settings-row">
                 <div><div class="text-sm font-medium">Dark mode</div><div class="text-xs" style="color:var(--muted)">Use dark color scheme</div></div>
                 <input type="checkbox" id="darkModeToggle" class="toggle" />
               </label>
@@ -1200,6 +1312,136 @@
     const openSidebar=()=>{sidebar.classList.remove('-translate-x-full');backdrop.classList.remove('hidden');};
     const closeSidebar=()=>{sidebar.classList.add('-translate-x-full');backdrop.classList.add('hidden');};
     if(menuBtn&&sidebar&&backdrop){menuBtn.addEventListener('click',()=>{sidebar.classList.contains('-translate-x-full')?openSidebar():closeSidebar();});backdrop.addEventListener('click',closeSidebar);sidebar.querySelectorAll('.nav-item').forEach((btn)=>btn.addEventListener('click',closeSidebar));}
+
+    // ── Fun stuff: tilt, drag-reorder, ripples, confetti ─────────────────────
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // 3D tilt-on-hover for every card (liquid-glass "catches the light" feel)
+    if(!prefersReducedMotion && window.matchMedia('(pointer: fine)').matches){
+      let tiltTarget=null, rafPending=false, lastEvent=null;
+      const applyTilt=()=>{
+        rafPending=false;
+        const e=lastEvent; if(!e) return;
+        const card=e.target.closest && e.target.closest('.card');
+        if(card && card.classList.contains('dragging')) return;
+        if(card){
+          tiltTarget=card;
+          const r=card.getBoundingClientRect();
+          const px=(e.clientX-r.left)/r.width-0.5;
+          const py=(e.clientY-r.top)/r.height-0.5;
+          card.style.transition='none';
+          card.style.transform=`perspective(700px) rotateX(${(-py*6).toFixed(2)}deg) rotateY(${(px*6).toFixed(2)}deg) translateY(-2px)`;
+          card.style.setProperty('--glint-x',(px*100+50)+'%');
+          card.style.setProperty('--glint-y',(py*100+50)+'%');
+        } else if(tiltTarget){
+          tiltTarget.style.transition='transform .35s cubic-bezier(.22,1,.36,1)';
+          tiltTarget.style.transform='';
+          tiltTarget=null;
+        }
+      };
+      document.addEventListener('mousemove',(e)=>{
+        lastEvent=e;
+        if(!rafPending){rafPending=true;requestAnimationFrame(applyTilt);}
+      });
+      document.addEventListener('mouseleave',()=>{
+        if(tiltTarget){tiltTarget.style.transition='transform .35s cubic-bezier(.22,1,.36,1)';tiltTarget.style.transform='';tiltTarget=null;}
+      });
+    }
+
+    // Drag-to-reorder stat cards
+    const statGrid=el('statGrid');
+    if(statGrid){
+      let dragEl=null;
+      statGrid.querySelectorAll('.stat-card').forEach((card)=>{
+        card.addEventListener('dragstart',()=>{dragEl=card;card.style.transform='';setTimeout(()=>card.classList.add('dragging'),0);});
+        card.addEventListener('dragend',()=>{card.classList.remove('dragging');statGrid.querySelectorAll('.stat-card').forEach((c)=>c.classList.remove('drag-over'));});
+        card.addEventListener('dragover',(e)=>{e.preventDefault();if(card!==dragEl)card.classList.add('drag-over');});
+        card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
+        card.addEventListener('drop',(e)=>{
+          e.preventDefault();
+          card.classList.remove('drag-over');
+          if(!dragEl||dragEl===card) return;
+          const cards=[...statGrid.querySelectorAll('.stat-card')];
+          const from=cards.indexOf(dragEl), to=cards.indexOf(card);
+          if(from<to) card.after(dragEl); else card.before(dragEl);
+          dragEl.classList.add('pop-in');
+          setTimeout(()=>dragEl.classList.remove('pop-in'),400);
+          try{localStorage.setItem('statOrder',[...statGrid.querySelectorAll('.stat-card')].map((c)=>c.dataset.statId).join(','));}catch{}
+        });
+      });
+      // Restore saved order
+      try{
+        const saved=localStorage.getItem('statOrder');
+        if(saved){
+          const order=saved.split(',');
+          order.forEach((id)=>{const c=statGrid.querySelector(`[data-stat-id="${id}"]`);if(c)statGrid.appendChild(c);});
+        }
+      }catch{}
+    }
+
+    // Bounce nav items on click
+    document.querySelectorAll('.nav-item').forEach((btn)=>{
+      btn.addEventListener('click',()=>{
+        btn.classList.remove('clicked');
+        void btn.offsetWidth;
+        btn.classList.add('clicked');
+      });
+    });
+
+    // Ripple + pop on buttons
+    document.addEventListener('click',(e)=>{
+      const btn=e.target.closest && e.target.closest('.btn, .btn-ghost, .mini-btn');
+      if(!btn) return;
+      btn.classList.remove('pop-click');
+      void btn.offsetWidth;
+      btn.classList.add('pop-click');
+      const rect=btn.getBoundingClientRect();
+      const size=Math.max(rect.width,rect.height)*1.2;
+      const ripple=document.createElement('span');
+      ripple.className='ripple';
+      ripple.style.width=ripple.style.height=size+'px';
+      ripple.style.left=(e.clientX-rect.left-size/2)+'px';
+      ripple.style.top=(e.clientY-rect.top-size/2)+'px';
+      btn.appendChild(ripple);
+      setTimeout(()=>ripple.remove(),600);
+    });
+
+    // Surprise! Confetti burst from the logo
+    function burstConfetti(originX,originY){
+      const colors=['#0a84ff','#5e5ce6','#bf5af2','#ff9f0a','#30d158','#ff453a'];
+      const count=prefersReducedMotion?0:36;
+      for(let i=0;i<count;i++){
+        const piece=document.createElement('div');
+        piece.className='confetti-piece';
+        const size=6+Math.random()*6;
+        piece.style.width=size+'px';
+        piece.style.height=(size*(0.5+Math.random()*0.7))+'px';
+        piece.style.left=originX+'px';
+        piece.style.background=colors[i%colors.length];
+        const drift=(Math.random()-0.5)*window.innerWidth*0.6;
+        const duration=1.6+Math.random()*1.2;
+        piece.style.setProperty('--drift',drift+'px');
+        piece.style.setProperty('--spin',(360*(2+Math.random()*3))+'deg');
+        piece.style.animationDuration=duration+'s';
+        piece.style.top=originY+'px';
+        document.body.appendChild(piece);
+        setTimeout(()=>piece.remove(),duration*1000+50);
+      }
+    }
+    const brandLogo=el('brandLogo');
+    if(brandLogo){
+      const surpriseLines=[
+        '🎉 Surprise! You found the fun button.',
+        '✨ Confetti! Because bots deserve celebrations too.',
+        '🎊 You clicked it. Chaos ensues.',
+        '🥳 WA bot approves of this click.'
+      ];
+      brandLogo.addEventListener('click',()=>{
+        const r=brandLogo.getBoundingClientRect();
+        burstConfetti(r.left+r.width/2, r.top+r.height/2);
+        toast(surpriseLines[Math.floor(Math.random()*surpriseLines.length)]);
+      });
+    }
   </script>
 </body>
 </html>
