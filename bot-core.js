@@ -15,7 +15,11 @@ const utils = require('./lib/utils');
 const socket = require('./lib/socket');
 const routes = require('./lib/routes');
 
-state.store = storeModule.loadStore();
+if (process.env.GIST_TOKEN) {
+    state.store = await storeModule.loadStoreWithGist();
+} else {
+    state.store = storeModule.loadStore();
+}
 
 async function startBot() {
     try {
