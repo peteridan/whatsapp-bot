@@ -1,4 +1,4 @@
-require('dotenv').config();
+import 'dotenv/config';
 
 process.on('uncaughtException', (err) => {
     console.error('Uncaught exception (keeping process alive):', err);
