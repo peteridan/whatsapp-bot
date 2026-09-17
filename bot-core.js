@@ -15,8 +15,8 @@ const utils = require('./lib/utils');
 const socket = require('./lib/socket');
 const routes = require('./lib/routes');
 
-if (process.env.GIST_TOKEN) {
-    state.store = await storeModule.loadStoreWithGist();
+if (process.env.FIREBASE_DB_URL) {
+    state.store = await storeModule.loadStoreWithFirebase();
 } else {
     state.store = storeModule.loadStore();
 }
