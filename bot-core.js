@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 process.on('uncaughtException', (err) => {
     console.error('Uncaught exception (keeping process alive):', err);
 });
@@ -15,20 +13,35 @@ const utils = require('./lib/utils');
 const socket = require('./lib/socket');
 const routes = require('./lib/routes');
 
-if (process.env.FIREBASE_DB_URL) {
-    state.store = await storeModule.loadStoreWithFirebase();
-} else {
-    state.store = storeModule.loadStore();
-}
+state.store = storeModule.loadStore();
 
-async function startBot() {
+(async () => {
     try {
-        if (!config.GROQ_MODEL && config.getGroqModel) {
+        if (process.env.FIREBASE_DB_URL) {
+            state.store = await storeModule.loadStoreWithFirebase();
+        } else {
+            state.store = storeModule.loadStore();
+        }
+    } catch (error) {
+        console.error('Failed to load persistent store:', error);
+        state.store = storeModule.loadStore();
+    }
+
+    if (!config.GROQ_MODEL && config.getGroqModel) {
+        try {
             const model = await config.getGroqModel();
             config.GROQ_MODEL = model;
             console.log('Resolved Groq model:', model);
+        } catch (error) {
+            console.error('Failed to resolve Groq model:', error);
         }
+    }
 
+    startBot();
+})();
+
+function startBot() {
+    try {
         socket.startSock();
 
         const server = routes.createServerInstance();
@@ -47,9 +60,6 @@ async function startBot() {
         });
     } catch (error) {
         console.error('Bot start failed, retrying in 3 seconds:', error);
-        await utils.delay(3000);
-        startBot();
+        setTimeout(() => startBot(), 3000);
     }
 }
-
-startBot();
